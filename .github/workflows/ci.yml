@@ -21,6 +21,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm --filter @racktrack/web lint
+      - run: pnpm -r lint
+
+      - run: pnpm --filter @racktrack/ui typecheck
+
+      - run: pnpm --filter @racktrack/ui build-storybook
 
       - run: pnpm --filter @racktrack/web build

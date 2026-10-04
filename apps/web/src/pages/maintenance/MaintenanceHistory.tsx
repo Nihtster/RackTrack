@@ -1,4 +1,4 @@
-import { PageHeader } from '../../components/layout/PageHeader';
+import { PageHeader } from '@racktrack/ui';
 
 export function MaintenanceHistory() {
   return (
