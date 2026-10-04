@@ -1,23 +1,36 @@
-import { demoFirearms } from './data/demoFirearms';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { AppLayout } from './components/layout/AppLayout';
+import { Dashboard } from './pages/dashboard/Dashboard';
+import { FirearmsList } from './pages/firearms/FirearmsList';
+import { FirearmForm } from './pages/firearms/FirearmForm';
+import { LogSession } from './pages/rounds/LogSession';
+import { RoundsHistory } from './pages/rounds/RoundsHistory';
+import { MaintenanceSchedule } from './pages/maintenance/MaintenanceSchedule';
+import { MaintenanceHistory } from './pages/maintenance/MaintenanceHistory';
+import { AmmoInventory } from './pages/ammo/AmmoInventory';
+import { AmmoTypes } from './pages/ammo/AmmoTypes';
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-6">
-      <h1 className="text-2xl font-semibold mb-4">RackTrack</h1>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Dashboard />} />
 
-      {demoFirearms.length === 0 && (
-        <p className="text-slate-400">No firearms yet.</p>
-      )}
+          <Route path="/firearms" element={<FirearmsList />} />
+          <Route path="/firearms/new" element={<FirearmForm />} />
 
-      <ul className="space-y-2">
-        {demoFirearms.map((f) => (
-          <li key={f.id} className="rounded border border-slate-800 p-3">
-            <span className="font-medium">{f.name}</span>
-            <span className="text-slate-400"> — {f.caliber}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+          <Route path="/rounds" element={<RoundsHistory />} />
+          <Route path="/rounds/new" element={<LogSession />} />
+
+          <Route path="/maintenance" element={<MaintenanceSchedule />} />
+          <Route path="/maintenance/history" element={<MaintenanceHistory />} />
+
+          <Route path="/ammo" element={<AmmoInventory />} />
+          <Route path="/ammo/types" element={<AmmoTypes />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

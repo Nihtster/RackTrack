@@ -1,9 +1,4 @@
-export interface Firearm {
-  id: string;
-  name: string;
-  caliber: string;
-  createdAt: string;
-}
+import type { Firearm } from '../types/firearm';
 
 // Demo data — stands in for the API until the backend is built.
 export const demoFirearms: Firearm[] = [
