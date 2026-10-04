@@ -16,3 +16,7 @@ export const TitleOnly: Story = {}
 export const WithSubtitle: Story = {
   args: { subtitle: 'Everything in your safe, in one place.' },
 }
+
+export const CustomClassName: Story = {
+  args: { subtitle: 'className merges over defaults', className: 'mb-12' },
+}
