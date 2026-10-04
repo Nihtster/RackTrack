@@ -1,0 +1,9 @@
+{
+  "name": "racktrack",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @racktrack/web dev",
+    "lint": "pnpm -r lint"
+  },
+  "packageManager": "pnpm@10.13.1"
+}
