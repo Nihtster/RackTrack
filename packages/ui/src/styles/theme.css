@@ -1,0 +1,20 @@
+@theme {
+  /* surfaces */
+  --color-app: #0b1016; /* app background */
+  --color-surface: #111923; /* cards / panels */
+  --color-surface-raised: #172231; /* elevated panels */
+  --color-border: #253447;
+
+  /* accent */
+  --color-accent: #2388ff;
+  --color-accent-bright: #55aaff;
+
+  /* text */
+  --color-ink: #e8eef5; /* primary text */
+  --color-ink-muted: #8997a8; /* secondary text */
+
+  /* status */
+  --color-success: #35c98a;
+  --color-warning: #f5b83d;
+  --color-critical: #ef5b67;
+}
