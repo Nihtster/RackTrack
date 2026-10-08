@@ -7,6 +7,13 @@ export const controlSize = {
   lg: 'h-12 px-6 text-base gap-2.5',
 } as const;
 
+// Square variant of controlSize, for icon-only controls.
+export const controlIconSize = {
+  sm: 'size-8 text-xs',
+  md: 'size-10 text-sm',
+  lg: 'size-12 text-base',
+} as const satisfies Record<keyof typeof controlSize, string>;
+
 export const controlBase =
   'inline-flex items-center justify-center rounded-control font-medium whitespace-nowrap transition-colors';
 

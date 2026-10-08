@@ -4,6 +4,7 @@ import {
   controlBase,
   controlDisabled,
   controlFocusRing,
+  controlIconSize,
   controlSize,
 } from '../theme/control';
 
@@ -18,7 +19,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   ghost: 'bg-transparent text-ink-muted hover:bg-surface-raised hover:text-ink',
 };
 
-export interface ButtonProps
+interface ButtonBaseProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -31,6 +32,17 @@ export interface ButtonProps
   children?: ReactNode;
   ref?: Ref<HTMLButtonElement>;
 }
+
+export type ButtonProps = ButtonBaseProps &
+  (
+    | { iconOnly?: false }
+    | {
+        /** Square button showing only an icon (pass it as `children`). */
+        iconOnly: true;
+        /** Required: with no visible text, this is the button's accessible name. */
+        'aria-label': string;
+      }
+  );
 
 function Spinner() {
   return (
@@ -69,6 +81,7 @@ export function Button({
   className,
   children,
   ref,
+  iconOnly = false,
   ...rest
 }: ButtonProps) {
   return (
@@ -82,7 +95,7 @@ export function Button({
         controlBase,
         controlFocusRing,
         controlDisabled,
-        controlSize[size],
+        iconOnly ? controlIconSize[size] : controlSize[size],
         variantClasses[variant],
         className,
       )}

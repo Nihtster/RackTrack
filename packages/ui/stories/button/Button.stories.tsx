@@ -1,9 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/button/Button'
+import { Tooltip } from '../../src/tooltip/Tooltip'
 
 const PlusIcon = (
   <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
     <path d="M12 5v14M5 12h14" />
+  </svg>
+)
+
+const MoreIcon = (
+  <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" />
   </svg>
 )
 
@@ -28,6 +35,24 @@ export const Ghost: Story = { args: { variant: 'ghost', children: 'View All' } }
 export const WithLeadingIcon: Story = { args: { leadingIcon: PlusIcon } }
 export const Loading: Story = { args: { loading: true } }
 export const Disabled: Story = { args: { disabled: true } }
+
+export const IconOnly: Story = {
+  args: { iconOnly: true, 'aria-label': 'More actions', variant: 'ghost', children: MoreIcon },
+}
+
+export const IconOnlyWithTooltip: Story = {
+  render: () => (
+    <div className="flex items-center gap-3 p-8">
+      {(['sm', 'md', 'lg'] as const).map((size) => (
+        <Tooltip key={size} content="More actions">
+          <Button iconOnly aria-label="More actions" variant="secondary" size={size}>
+            {MoreIcon}
+          </Button>
+        </Tooltip>
+      ))}
+    </div>
+  ),
+}
 
 export const Sizes: Story = {
   render: (args) => (
