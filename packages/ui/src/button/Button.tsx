@@ -1,8 +1,14 @@
 import type { ButtonHTMLAttributes, ReactNode, Ref } from 'react';
 import { cn } from '../utils/cn';
+import {
+  controlBase,
+  controlDisabled,
+  controlFocusRing,
+  controlSize,
+} from '../theme/control';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonSize = keyof typeof controlSize;
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-accent text-ink hover:bg-accent-bright',
@@ -10,12 +16,6 @@ const variantClasses: Record<ButtonVariant, string> = {
     'bg-surface-raised text-ink border border-border hover:border-accent hover:text-accent-bright',
   danger: 'bg-critical text-app hover:bg-critical/85',
   ghost: 'bg-transparent text-ink-muted hover:bg-surface-raised hover:text-ink',
-};
-
-const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'h-8 px-3 text-xs gap-1.5',
-  md: 'h-10 px-4 text-sm gap-2',
-  lg: 'h-12 px-6 text-base gap-2.5',
 };
 
 export interface ButtonProps
@@ -78,11 +78,12 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        'relative inline-flex items-center justify-center rounded-md font-medium whitespace-nowrap transition-colors',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-bright',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
+        'relative',
+        controlBase,
+        controlFocusRing,
+        controlDisabled,
+        controlSize[size],
         variantClasses[variant],
-        sizeClasses[size],
         className,
       )}
       {...rest}
