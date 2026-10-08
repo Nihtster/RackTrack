@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @racktrack/web dev",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "storybook": "pnpm --filter @racktrack/ui storybook"
   },
   "packageManager": "pnpm@10.13.1"
 }

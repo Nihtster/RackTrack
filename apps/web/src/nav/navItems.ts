@@ -1,13 +1,4 @@
-export interface NavSubItem {
-  label: string;
-  path: string;
-}
-
-export interface NavItem {
-  label: string;
-  path: string;
-  subItems?: NavSubItem[];
-}
+import type { NavItem } from '@racktrack/ui';
 
 export const navItems: NavItem[] = [
   { label: 'Dashboard', path: '/' },

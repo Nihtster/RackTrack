@@ -1,0 +1,73 @@
+import { useState } from 'react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Sidebar, type NavItem } from '../../src/nav/Sidebar'
+
+const items: NavItem[] = [
+  { label: 'Dashboard', path: '/' },
+  {
+    label: 'Firearms',
+    path: '/firearms',
+    subItems: [
+      { label: 'All Firearms', path: '/firearms' },
+      { label: 'Add Firearm', path: '/firearms/new' },
+    ],
+  },
+  {
+    label: 'Rounds',
+    path: '/rounds',
+    subItems: [
+      { label: 'Log Session', path: '/rounds/new' },
+      { label: 'History', path: '/rounds' },
+    ],
+  },
+  { label: 'Ammo', path: '/ammo' },
+]
+
+const meta = {
+  title: 'Nav/Sidebar',
+  component: Sidebar,
+  tags: ['autodocs'],
+  parameters: { layout: 'fullscreen' },
+  args: { items, activePath: '/' },
+} satisfies Meta<typeof Sidebar>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {}
+
+export const ActiveSubItem: Story = {
+  args: { activePath: '/rounds/new' },
+}
+
+export const CustomBrand: Story = {
+  args: { brand: 'Range Day' },
+}
+
+function InteractiveSidebar(args: React.ComponentProps<typeof Sidebar>) {
+  const [path, setPath] = useState(args.activePath)
+  return (
+    <Sidebar
+      {...args}
+      activePath={path}
+      renderLink={({ href, children, onClick, ...rest }) => (
+        <a
+          {...rest}
+          href={href}
+          onClick={(e) => {
+            e.preventDefault()
+            if (onClick) onClick(e)
+            else setPath(href)
+          }}
+        >
+          {children}
+        </a>
+      )}
+    />
+  )
+}
+
+// Wires the injected link renderer to local state, standing in for a router.
+export const Interactive: Story = {
+  render: (args) => <InteractiveSidebar {...args} />,
+}

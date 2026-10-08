@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "ignorePatterns": ["storybook-static"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["@racktrack/web", "@racktrack/web/*", "**/apps/**"],
+            "message": "@racktrack/ui must not depend on the web app."
+          },
+          {
+            "group": ["react-router", "react-router-dom"],
+            "message": "ui components must be router-agnostic; accept links/handlers as props."
+          }
+        ]
+      }
+    ]
+  }
+}
