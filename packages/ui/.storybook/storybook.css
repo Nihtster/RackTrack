@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @import "../src/styles/theme.css";
+
+/* Fill the whole preview, not just the body's height. */
+html {
+  background-color: var(--color-app);
+  min-height: 100%;
+}

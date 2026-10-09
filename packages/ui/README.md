@@ -17,6 +17,11 @@ pnpm --filter @racktrack/ui build-storybook
 - `stories/<group>/Foo.stories.tsx`: its stories (kept out of `src`)
 - `src/styles/theme.css`: design tokens (Tailwind `@theme`)
 - `src/theme/colors.ts`: same palette as raw hex, for non-Tailwind contexts
+- `src/theme/control.ts`: shared sizing, focus ring, and disabled style for
+  interactive controls (Button, ToggleGroup, ...). New controls should reuse it
+  so heights line up.
+- `src/theme/intent.ts`: shared tinted status colors (neutral, accent, success,
+  warning, critical) for non-solid elements like Badge
 - Public API: everything must be exported from `src/index.ts`
 
 ## Rules
@@ -29,9 +34,21 @@ pnpm --filter @racktrack/ui build-storybook
 3. **`className` passthrough.** Accept `className` and apply it last via
    `cn(defaults, className)` so consumers can override. `cn` is exported.
 4. **Refs.** React 19: take `ref` as a normal prop, no `forwardRef`.
-5. **Native props.** Wrap native elements by extending
-   `React.ComponentProps<'button'>` (etc.) and spreading the rest.
+5. **Native props.** Wrap native elements by extending their props type
+   (e.g. `ButtonHTMLAttributes<HTMLButtonElement>`) and spreading the rest.
 6. **Every component gets stories** covering each variant and state.
+
+## Menu vs Select
+
+`Menu` is a list of actions opened from a trigger (row "⋯", split-button
+chevron, user menu); picking an item runs it and nothing stays selected. A
+control that holds a chosen value in a form is a `Select` (form fields), not a
+`Menu`.
+
+## Dark-mode extensions
+
+Extensions like Dark Reader can recolor the translucent badge tints. Whitelist
+Storybook and the app in the extension rather than changing component styles.
 
 ## Tailwind
 
