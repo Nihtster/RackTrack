@@ -1,6 +1,6 @@
 import type { MouseEventHandler, ReactNode } from 'react';
 import { cn } from '../utils/cn';
-import { Menu, type MenuItem } from '../menu/Menu';
+import { Menu, type MenuItem } from './Menu';
 import { Button, type ButtonSize, type ButtonVariant } from './Button';
 
 export interface SplitButtonProps {

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Card, CardBody } from '../../src/card/Card'
-import { Loading } from '../../src/loading/Loading'
-import { Skeleton } from '../../src/loading/Skeleton'
-import { Spinner } from '../../src/loading/Spinner'
+import { Card, CardBody } from '../../src/layout/Card'
+import { Loading } from '../../src/feedback/Loading'
+import { Skeleton } from '../../src/feedback/Skeleton'
+import { Spinner } from '../../src/feedback/Spinner'
 
 const meta = {
-  title: 'Layout/Loading',
+  title: 'Feedback/Loading',
   component: Loading,
   tags: ['autodocs'],
 } satisfies Meta<typeof Loading>

@@ -1,34 +1,26 @@
-export { Button } from './button/Button'
-export type { ButtonProps, ButtonSize, ButtonVariant } from './button/Button'
-export { SplitButton } from './button/SplitButton'
-export type { SplitButtonProps } from './button/SplitButton'
+// core
+export { Button } from './core/Button'
+export type { ButtonProps, ButtonSize, ButtonVariant } from './core/Button'
+export { SplitButton } from './core/SplitButton'
+export type { SplitButtonProps } from './core/SplitButton'
+export { Badge } from './core/Badge'
+export type { BadgeIntent, BadgeProps, BadgeSize } from './core/Badge'
+export { ToggleGroup } from './core/ToggleGroup'
+export type { ToggleGroupOption, ToggleGroupProps } from './core/ToggleGroup'
+export { Menu } from './core/Menu'
+export type { MenuItem, MenuProps } from './core/Menu'
+export { Tooltip } from './core/Tooltip'
+export type { TooltipProps } from './core/Tooltip'
 
-export { Badge } from './badge/Badge'
-export type { BadgeIntent, BadgeProps, BadgeSize } from './badge/Badge'
-export { ToggleGroup } from './toggle-group/ToggleGroup'
-export type { ToggleGroupOption, ToggleGroupProps } from './toggle-group/ToggleGroup'
-export { Card, CardBody, CardFooter, CardHeader } from './card/Card'
-export type { CardHeaderProps, CardProps } from './card/Card'
-export { StatTile } from './stat-tile/StatTile'
-export type { StatTileProps } from './stat-tile/StatTile'
-export { EmptyState } from './empty-state/EmptyState'
-export type { EmptyStateProps } from './empty-state/EmptyState'
-export { Loading } from './loading/Loading'
-export type { LoadingProps } from './loading/Loading'
-export { Skeleton } from './loading/Skeleton'
-export { Spinner } from './loading/Spinner'
-export type { SpinnerProps, SpinnerSize } from './loading/Spinner'
-export { Tabs } from './tabs/Tabs'
-export type { TabItem, TabsProps } from './tabs/Tabs'
-export { Menu } from './menu/Menu'
-export type { MenuItem, MenuProps } from './menu/Menu'
-
-export { Tooltip } from './tooltip/Tooltip'
-export type { TooltipProps } from './tooltip/Tooltip'
-
+// layout
+export { Card, CardBody, CardFooter, CardHeader } from './layout/Card'
+export type { CardHeaderProps, CardProps, CardSize } from './layout/Card'
+export { StatTile } from './layout/StatTile'
+export type { StatTileProps } from './layout/StatTile'
 export { PageHeader } from './layout/PageHeader'
 export type { PageHeaderProps } from './layout/PageHeader'
 
+// nav
 export { Sidebar } from './nav/Sidebar'
 export type {
   NavItem,
@@ -36,5 +28,17 @@ export type {
   RenderSidebarLink,
   SidebarLinkProps,
 } from './nav/Sidebar'
+export { Tabs } from './nav/Tabs'
+export type { TabItem, TabsProps } from './nav/Tabs'
 
+// feedback
+export { EmptyState } from './feedback/EmptyState'
+export type { EmptyStateProps } from './feedback/EmptyState'
+export { Loading } from './feedback/Loading'
+export type { LoadingProps } from './feedback/Loading'
+export { Skeleton } from './feedback/Skeleton'
+export { Spinner } from './feedback/Spinner'
+export type { SpinnerProps, SpinnerSize } from './feedback/Spinner'
+
+// utils
 export { cn } from './utils/cn'

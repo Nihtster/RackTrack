@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode, Ref } from 'react';
 import { cn } from '../utils/cn';
-import { Spinner } from '../loading/Spinner';
+import { Spinner } from '../feedback/Spinner';
 import {
   controlBase,
   controlDisabled,

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Tabs } from '../../src/tabs/Tabs'
+import { Tabs } from '../../src/nav/Tabs'
 
 const items = [
   { value: 'overview', label: 'Overview', content: <p className="text-sm text-ink-muted">Glock 19 Gen5, 9x19mm. 842 rounds fired.</p> },
@@ -10,7 +10,7 @@ const items = [
 ]
 
 const meta = {
-  title: 'Layout/Tabs',
+  title: 'Nav/Tabs',
   component: Tabs,
   tags: ['autodocs'],
   args: { items, 'aria-label': 'Firearm details' },

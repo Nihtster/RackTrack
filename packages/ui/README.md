@@ -11,10 +11,29 @@ pnpm --filter @racktrack/ui typecheck
 pnpm --filter @racktrack/ui build-storybook
 ```
 
+## What belongs here
+
+This package is **base components only**: nothing in it knows what a firearm,
+round, ammo type, or route is. Everything arrives through props. Test: could it
+drop into an unrelated app unchanged? If so it belongs here.
+
+Product-specific components (`FirearmForm`, a "Total Rounds" dashboard tile, the
+firearms table) live in `apps/web`: `src/components/` when several pages use
+them, next to the page (`pages/<area>/`) when one does. They compose these base
+components. Promote one to this package once two or more pages use it and no
+domain knowledge is left in it.
+
 ## Layout
 
-- `src/<group>/Foo.tsx`: component
-- `stories/<group>/Foo.stories.tsx`: its stories (kept out of `src`)
+- `src/<group>/Foo.tsx`: component, flat inside its group. Groups:
+  - `core/`: controls and small primitives (Button, Badge, ToggleGroup, Menu, Tooltip)
+  - `layout/`: structure and surfaces (Card, StatTile, PageHeader)
+  - `nav/`: navigation (Sidebar, Tabs)
+  - `feedback/`: loading and empty states (Spinner, Loading, Skeleton, EmptyState)
+  - add `forms/`, `data/`, `overlays/` as those components land
+- `stories/<group>/Foo.stories.tsx`: its stories (kept out of `src`); the
+  Storybook title uses the same group (`Core/Button`)
+- `src/hooks/`: shared internals (e.g. `useRovingSelection`), not exported
 - `src/styles/theme.css`: design tokens (Tailwind `@theme`)
 - `src/theme/colors.ts`: same palette as raw hex, for non-Tailwind contexts
 - `src/theme/control.ts`: shared sizing, focus ring, and disabled style for
@@ -37,6 +56,14 @@ pnpm --filter @racktrack/ui build-storybook
 5. **Native props.** Wrap native elements by extending their props type
    (e.g. `ButtonHTMLAttributes<HTMLButtonElement>`) and spreading the rest.
 6. **Every component gets stories** covering each variant and state.
+
+## Sizes
+
+Components that come in sizes use `sm` / `md` / `lg`. Controls (Button,
+ToggleGroup) share `theme/control.ts`; Card and StatTile have their own scale,
+with `lg` the original roomy layout and `md` the default. Sizes are explicit
+props; container-query driven sizing can be layered on later if clusters of
+components need to adapt to their container.
 
 ## Menu vs Select
 

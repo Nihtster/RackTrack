@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Button } from '../../src/button/Button'
-import { Card } from '../../src/card/Card'
-import { EmptyState } from '../../src/empty-state/EmptyState'
+import { Button } from '../../src/core/Button'
+import { Card } from '../../src/layout/Card'
+import { EmptyState } from '../../src/feedback/EmptyState'
 
 const BoxIcon = (
   <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -10,7 +10,7 @@ const BoxIcon = (
 )
 
 const meta = {
-  title: 'Layout/EmptyState',
+  title: 'Feedback/EmptyState',
   component: EmptyState,
   tags: ['autodocs'],
   args: {
