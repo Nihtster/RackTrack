@@ -18,6 +18,8 @@ export type { LoadingProps } from './loading/Loading'
 export { Skeleton } from './loading/Skeleton'
 export { Spinner } from './loading/Spinner'
 export type { SpinnerProps, SpinnerSize } from './loading/Spinner'
+export { Tabs } from './tabs/Tabs'
+export type { TabItem, TabsProps } from './tabs/Tabs'
 export { Menu } from './menu/Menu'
 export type { MenuItem, MenuProps } from './menu/Menu'
 

@@ -1,5 +1,6 @@
-import { useRef, type KeyboardEvent, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { cn } from '../utils/cn';
+import { useRovingSelection } from '../hooks/useRovingSelection';
 import {
   controlBase,
   controlDisabled,
@@ -33,27 +34,7 @@ export function ToggleGroup<T extends string>({
   className,
   ...rest
 }: ToggleGroupProps<T>) {
-  const refs = useRef<Array<HTMLButtonElement | null>>([]);
-
-  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
-    const dir =
-      e.key === 'ArrowRight' || e.key === 'ArrowDown'
-        ? 1
-        : e.key === 'ArrowLeft' || e.key === 'ArrowUp'
-          ? -1
-          : 0;
-    if (!dir) return;
-    e.preventDefault();
-    const current = options.findIndex((o) => o.value === value);
-    for (let step = 1; step <= options.length; step++) {
-      const i = (current + dir * step + options.length * step) % options.length;
-      if (!options[i].disabled) {
-        onChange(options[i].value);
-        refs.current[i]?.focus();
-        return;
-      }
-    }
-  }
+  const { onKeyDown, setRef } = useRovingSelection(options, value, onChange);
 
   return (
     <div
@@ -67,9 +48,7 @@ export function ToggleGroup<T extends string>({
         return (
           <button
             key={option.value}
-            ref={(node) => {
-              refs.current[i] = node;
-            }}
+            ref={setRef(i)}
             type="button"
             role="radio"
             aria-checked={selected}
