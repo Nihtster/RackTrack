@@ -1,6 +1,6 @@
 import { cn } from '../utils/cn'
 
-interface PageHeaderProps {
+export interface PageHeaderProps {
   title: string;
   subtitle?: string;
   className?: string;
