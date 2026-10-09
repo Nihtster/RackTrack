@@ -31,6 +31,16 @@ export type {
 export { Tabs } from './nav/Tabs'
 export type { TabItem, TabsProps } from './nav/Tabs'
 
+// forms
+export { Field } from './forms/Field'
+export type { FieldProps } from './forms/Field'
+export { Input } from './forms/Input'
+export type { InputProps, InputSize } from './forms/Input'
+export { Textarea } from './forms/Textarea'
+export type { TextareaProps } from './forms/Textarea'
+export { Select } from './forms/Select'
+export type { SelectProps } from './forms/Select'
+
 // feedback
 export { EmptyState } from './feedback/EmptyState'
 export type { EmptyStateProps } from './feedback/EmptyState'
