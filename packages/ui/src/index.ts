@@ -7,6 +7,8 @@ export { Badge } from './badge/Badge'
 export type { BadgeIntent, BadgeProps, BadgeSize } from './badge/Badge'
 export { ToggleGroup } from './toggle-group/ToggleGroup'
 export type { ToggleGroupOption, ToggleGroupProps } from './toggle-group/ToggleGroup'
+export { Card, CardBody, CardFooter, CardHeader } from './card/Card'
+export type { CardHeaderProps, CardProps } from './card/Card'
 export { Menu } from './menu/Menu'
 export type { MenuItem, MenuProps } from './menu/Menu'
 
