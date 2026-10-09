@@ -42,6 +42,8 @@ export { Select } from './forms/Select'
 export type { SelectProps } from './forms/Select'
 export { SearchInput } from './forms/SearchInput'
 export type { SearchInputProps } from './forms/SearchInput'
+export { Calendar } from './forms/Calendar'
+export type { CalendarProps } from './forms/Calendar'
 
 // feedback
 export { EmptyState } from './feedback/EmptyState'
