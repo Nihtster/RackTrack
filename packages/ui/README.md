@@ -30,7 +30,8 @@ domain knowledge is left in it.
   - `layout/`: structure and surfaces (Card, StatTile, PageHeader)
   - `nav/`: navigation (Sidebar, Tabs)
   - `feedback/`: loading and empty states (Spinner, Loading, Skeleton, EmptyState)
-  - add `forms/`, `data/`, `overlays/` as those components land
+  - `forms/`: Field (label, hint, error wiring), Input, Textarea, Select, SearchInput, Calendar, RangeCalendar, DatePicker, DateRangePicker
+  - add `data/`, `overlays/` as those components land
 - `stories/<group>/Foo.stories.tsx`: its stories (kept out of `src`); the
   Storybook title uses the same group (`Core/Button`)
 - `src/hooks/`: shared internals (e.g. `useRovingSelection`), not exported
