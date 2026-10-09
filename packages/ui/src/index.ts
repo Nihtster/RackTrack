@@ -40,6 +40,8 @@ export { Textarea } from './forms/Textarea'
 export type { TextareaProps } from './forms/Textarea'
 export { Select } from './forms/Select'
 export type { SelectProps } from './forms/Select'
+export { SearchInput } from './forms/SearchInput'
+export type { SearchInputProps } from './forms/SearchInput'
 
 // feedback
 export { EmptyState } from './feedback/EmptyState'
