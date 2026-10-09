@@ -3,6 +3,10 @@ export type { ButtonProps, ButtonSize, ButtonVariant } from './button/Button'
 export { SplitButton } from './button/SplitButton'
 export type { SplitButtonProps } from './button/SplitButton'
 
+export { Badge } from './badge/Badge'
+export type { BadgeIntent, BadgeProps, BadgeSize } from './badge/Badge'
+export { ToggleGroup } from './toggle-group/ToggleGroup'
+export type { ToggleGroupOption, ToggleGroupProps } from './toggle-group/ToggleGroup'
 export { Menu } from './menu/Menu'
 export type { MenuItem, MenuProps } from './menu/Menu'
 
