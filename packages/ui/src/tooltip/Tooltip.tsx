@@ -58,6 +58,8 @@ export function Tooltip({
     useRole(context, { role: 'tooltip' }),
   ]);
 
+  // `ref` is a plain prop in React 19, not a ref object read during render.
+  // oxlint-disable-next-line react/refs
   const ref = useMergeRefs([refs.setReference, children.props.ref]);
 
   return (

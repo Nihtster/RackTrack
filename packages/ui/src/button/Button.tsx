@@ -8,7 +8,7 @@ import {
   controlSize,
 } from '../theme/control';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'link';
 export type ButtonSize = keyof typeof controlSize;
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -17,6 +17,8 @@ const variantClasses: Record<ButtonVariant, string> = {
     'bg-surface-raised text-ink border border-border hover:border-accent hover:text-accent-bright',
   danger: 'bg-critical text-app hover:bg-critical/85',
   ghost: 'bg-transparent text-ink-muted hover:bg-surface-raised hover:text-ink',
+  // Inline text action ("View All →"): no box, so drop height and padding.
+  link: 'h-auto pointer-coarse:h-auto px-0 bg-transparent text-accent-bright hover:text-accent hover:underline',
 };
 
 interface ButtonBaseProps

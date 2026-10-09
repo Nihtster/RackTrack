@@ -65,6 +65,8 @@ export function Menu({
     useListNavigation(context, { listRef, activeIndex, onNavigate: setActiveIndex }),
   ]);
 
+  // `ref` is a plain prop in React 19, not a ref object read during render.
+  // oxlint-disable-next-line react/refs
   const ref = useMergeRefs([refs.setReference, trigger.props.ref]);
 
   return (

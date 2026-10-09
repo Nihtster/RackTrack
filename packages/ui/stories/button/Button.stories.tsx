@@ -20,7 +20,7 @@ const meta = {
   tags: ['autodocs'],
   args: { children: 'Add Firearm' },
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'danger', 'ghost'] },
+    variant: { control: 'select', options: ['primary', 'secondary', 'danger', 'ghost', 'link'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
   },
 } satisfies Meta<typeof Button>
@@ -32,6 +32,7 @@ export const Primary: Story = {}
 export const Secondary: Story = { args: { variant: 'secondary', children: 'Custom Range' } }
 export const Danger: Story = { args: { variant: 'danger', children: 'Delete' } }
 export const Ghost: Story = { args: { variant: 'ghost', children: 'View All' } }
+export const Link: Story = { args: { variant: 'link', children: 'View All →' } }
 export const WithLeadingIcon: Story = { args: { leadingIcon: PlusIcon } }
 export const Loading: Story = { args: { loading: true } }
 export const Disabled: Story = { args: { disabled: true } }
@@ -67,7 +68,7 @@ export const Sizes: Story = {
 export const AllVariants: Story = {
   render: (args) => (
     <div className="grid grid-cols-[repeat(4,max-content)] gap-3">
-      {(['primary', 'secondary', 'danger', 'ghost'] as const).map((variant) => (
+      {(['primary', 'secondary', 'danger', 'ghost', 'link'] as const).map((variant) => (
         <div key={variant} className="contents">
           <Button {...args} variant={variant}>{variant}</Button>
           <Button {...args} variant={variant} leadingIcon={PlusIcon}>With icon</Button>

@@ -19,6 +19,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "10.6.1",
     "@storybook/react-vite": "^10.6.1",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.19.1",
