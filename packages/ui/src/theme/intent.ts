@@ -9,3 +9,12 @@ export const intentTint = {
 } as const;
 
 export type Intent = keyof typeof intentTint;
+
+// Text-only status colors, for small annotations (stat deltas, helper text).
+export const intentText = {
+  neutral: 'text-ink-muted',
+  accent: 'text-accent-bright',
+  success: 'text-success',
+  warning: 'text-warning',
+  critical: 'text-critical',
+} as const satisfies Record<Intent, string>;

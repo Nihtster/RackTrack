@@ -9,6 +9,8 @@ export { ToggleGroup } from './toggle-group/ToggleGroup'
 export type { ToggleGroupOption, ToggleGroupProps } from './toggle-group/ToggleGroup'
 export { Card, CardBody, CardFooter, CardHeader } from './card/Card'
 export type { CardHeaderProps, CardProps } from './card/Card'
+export { StatTile } from './stat-tile/StatTile'
+export type { StatTileProps } from './stat-tile/StatTile'
 export { Menu } from './menu/Menu'
 export type { MenuItem, MenuProps } from './menu/Menu'
 
