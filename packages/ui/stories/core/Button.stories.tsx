@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Button } from '../../src/button/Button'
-import { Tooltip } from '../../src/tooltip/Tooltip'
+import { Button } from '../../src/core/Button'
+import { Tooltip } from '../../src/core/Tooltip'
 
 const PlusIcon = (
   <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">

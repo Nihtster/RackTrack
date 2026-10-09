@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { ToggleGroup } from '../../src/toggle-group/ToggleGroup'
+import { ToggleGroup } from '../../src/core/ToggleGroup'
 
 const filters = [
   { value: 'all', label: 'All (5)' },

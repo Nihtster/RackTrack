@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Button } from '../../src/button/Button'
-import { Menu } from '../../src/menu/Menu'
+import { Button } from '../../src/core/Button'
+import { Menu } from '../../src/core/Menu'
 
 const DotsIcon = (
   <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
