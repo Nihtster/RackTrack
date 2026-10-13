@@ -10,9 +10,13 @@ import { MaintenanceHistory } from './pages/maintenance/MaintenanceHistory';
 import { AmmoInventory } from './pages/ammo/AmmoInventory';
 import { AmmoTypes } from './pages/ammo/AmmoTypes';
 
+// The app lives under a path on GitHub Pages (see `base` in vite.config.ts), so
+// the router needs the same prefix, minus the trailing slash.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Dashboard />} />
