@@ -20,3 +20,7 @@ export const motionFade =
 /** Toasts: fade and rise from slightly below. */
 export const motionSlide =
   'transition duration-200 ease-out motion-reduce:transition-none data-[status=initial]:translate-y-2 data-[status=initial]:opacity-0 data-[status=close]:translate-y-2 data-[status=close]:opacity-0';
+
+/** Side drawers: slide in from the left edge. */
+export const motionDrawer =
+  'transition-transform duration-150 ease-out motion-reduce:transition-none data-[status=initial]:-translate-x-full data-[status=close]:-translate-x-full';

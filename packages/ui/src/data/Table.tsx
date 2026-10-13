@@ -9,6 +9,7 @@ import {
 import { cn } from '../utils/cn';
 import { controlFocusRing } from '../theme/control';
 import { EmptyState, type EmptyStateProps } from '../feedback/EmptyState';
+import { ChevronDown, ChevronUp, Icon } from '../icons';
 
 // Composable table, adapted from Mantine's Table API: Table + TableHead /
 // TableBody / TableFoot / TableRow / TableHeader / TableCell / TableCaption.
@@ -151,21 +152,22 @@ export interface TableHeaderProps
 }
 
 function SortIcon({ direction }: { direction: SortDirection | null | undefined }) {
-  // TODO(icon set): swap for Icon components once #67 lands.
+  // Both chevrons are always drawn; the one for the active direction stays solid.
   return (
-    <svg
-      className="size-3.5 shrink-0"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m8 9 4-4 4 4" className={direction === 'desc' ? 'opacity-30' : undefined} />
-      <path d="m8 15 4 4 4-4" className={direction === 'asc' ? 'opacity-30' : undefined} />
-    </svg>
+    <span className="flex shrink-0 flex-col -space-y-1.5" aria-hidden="true">
+      <Icon
+        icon={ChevronUp}
+        size="xs"
+        strokeWidth={2.5}
+        className={direction === 'desc' ? 'opacity-30' : undefined}
+      />
+      <Icon
+        icon={ChevronDown}
+        size="xs"
+        strokeWidth={2.5}
+        className={direction === 'asc' ? 'opacity-30' : undefined}
+      />
+    </span>
   );
 }
 
@@ -200,7 +202,7 @@ export function TableHeader({
           type="button"
           onClick={onSort}
           className={cn(
-            '-mx-1 inline-flex items-center gap-1 rounded-control px-1 py-0.5 font-medium transition-colors hover:text-ink',
+            '-mx-1 inline-flex items-center gap-1 rounded-control px-1 py-0.5 pointer-coarse:min-h-11 font-medium transition-colors hover:text-ink',
             numeric && 'flex-row-reverse',
             sorted && 'text-ink',
             controlFocusRing,

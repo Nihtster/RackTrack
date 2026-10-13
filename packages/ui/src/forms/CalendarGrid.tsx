@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '../utils/cn';
 import { controlFocusRing } from '../theme/control';
 import { Button } from '../core/Button';
+import { Icon, ChevronLeft, ChevronRight } from '../icons';
 import {
   addDays,
   addMonths,
@@ -36,23 +37,6 @@ export interface CalendarGridProps {
   /** `preview` is the hovered or keyboard-focused day, for range hover preview. */
   getDayState: (iso: string, preview: string | null) => DayState;
   onSelectDay: (iso: string) => void;
-}
-
-function Chevron({ direction }: { direction: 'left' | 'right' }) {
-  return (
-    <svg
-      className="size-4"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d={direction === 'left' ? 'm15 6-6 6 6 6' : 'm9 6 6 6-6 6'} />
-    </svg>
-  );
 }
 
 function clamp(iso: string, min?: string, max?: string) {
@@ -172,7 +156,7 @@ export function CalendarGrid({
           disabled={prevDisabled}
           onClick={() => setView(addMonths(view, -1))}
         >
-          <Chevron direction="left" />
+          <Icon icon={ChevronLeft} />
         </Button>
         <div id={headingId} aria-live="polite" className="text-sm font-semibold">
           {monthLabel}
@@ -185,7 +169,7 @@ export function CalendarGrid({
           disabled={nextDisabled}
           onClick={() => setView(addMonths(view, 1))}
         >
-          <Chevron direction="right" />
+          <Icon icon={ChevronRight} />
         </Button>
       </div>
 

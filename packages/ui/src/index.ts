@@ -17,6 +17,8 @@ export { Card, CardBody, CardFooter, CardHeader } from './layout/Card'
 export type { CardHeaderProps, CardProps, CardSize } from './layout/Card'
 export { StatTile } from './layout/StatTile'
 export type { StatTileProps } from './layout/StatTile'
+export { AppShell } from './layout/AppShell'
+export type { AppShellProps } from './layout/AppShell'
 export { PageHeader } from './layout/PageHeader'
 export type { PageHeaderProps } from './layout/PageHeader'
 
@@ -54,6 +56,8 @@ export type { SearchInputProps } from './forms/SearchInput'
 // overlays
 export { Modal } from './overlays/Modal'
 export type { ModalProps, ModalSize } from './overlays/Modal'
+export { Drawer } from './overlays/Drawer'
+export type { DrawerProps } from './overlays/Drawer'
 export { ConfirmDialog } from './overlays/ConfirmDialog'
 export type { ConfirmDialogProps } from './overlays/ConfirmDialog'
 export { ToastProvider } from './overlays/Toast'
@@ -106,6 +110,42 @@ export type { LoadingProps } from './feedback/Loading'
 export { Skeleton } from './feedback/Skeleton'
 export { Spinner } from './feedback/Spinner'
 export type { SpinnerProps, SpinnerSize } from './feedback/Spinner'
+
+// icons
+export { Icon, StatusIcon } from './icons';
+export type {
+  ComponentIconProps,
+  IconComponent,
+  IconProps,
+  IconSize,
+  ImageIconProps,
+  StatusIconProps,
+} from './icons';
+export {
+  Calendar as CalendarIcon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CircleCheck,
+  CircleX,
+  Crosshair,
+  Info,
+  LayoutDashboard,
+  MenuIcon,
+  Package,
+  Pencil,
+  Plus,
+  Search as SearchIcon,
+  Target,
+  Trash2,
+  TriangleAlert,
+  Wrench,
+  X as CloseIcon,
+} from './icons';
+
+// hooks
+export { useMediaQuery } from './hooks/useMediaQuery'
 
 // utils
 export { cn } from './utils/cn'

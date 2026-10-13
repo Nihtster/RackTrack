@@ -1,9 +1,17 @@
-import type { NavItem } from '@racktrack/ui';
+import {
+  Crosshair,
+  LayoutDashboard,
+  Package,
+  Target,
+  Wrench,
+  type NavItem,
+} from '@racktrack/ui';
 
 export const navItems: NavItem[] = [
-  { label: 'Dashboard', path: '/' },
+  { label: 'Dashboard', path: '/', icon: LayoutDashboard },
   {
     label: 'Firearms',
+    icon: Crosshair,
     path: '/firearms',
     subItems: [
       { label: 'All Firearms', path: '/firearms' },
@@ -12,6 +20,7 @@ export const navItems: NavItem[] = [
   },
   {
     label: 'Rounds',
+    icon: Target,
     path: '/rounds',
     subItems: [
       { label: 'Log Session', path: '/rounds/new' },
@@ -20,6 +29,7 @@ export const navItems: NavItem[] = [
   },
   {
     label: 'Maintenance',
+    icon: Wrench,
     path: '/maintenance',
     subItems: [
       { label: 'Schedule', path: '/maintenance' },
@@ -28,6 +38,7 @@ export const navItems: NavItem[] = [
   },
   {
     label: 'Ammo',
+    icon: Package,
     path: '/ammo',
     subItems: [
       { label: 'Inventory', path: '/ammo' },

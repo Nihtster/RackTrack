@@ -127,7 +127,7 @@ export function PieChart({
                 <span className="w-9 text-right tabular-nums text-ink-muted">{percent}%</span>
               </>
             );
-            const rowClass = 'flex w-full items-center gap-2 rounded-control px-2 py-1.5 text-sm';
+            const rowClass = 'flex w-full items-center gap-2 rounded-control px-2 py-1.5 pointer-coarse:min-h-11 text-sm';
             return (
               <li key={String(row[nameKey])}>
                 {onSliceClick ? (
