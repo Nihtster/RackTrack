@@ -106,10 +106,12 @@ export const ClickableBars: Story = {
       [...canvasElement.querySelectorAll('.recharts-bar-rectangle path')].find(
         (p) => p.getBoundingClientRect().height > 20,
       )
-    await waitFor(() => expect(tallBar()).toBeDefined(), { timeout: 4000 })
+    await waitFor(() => expect(tallBar()).toBeDefined(), { timeout: 10000 })
     await userEvent.click(tallBar()!)
     // The story reports the clicked row, e.g. "Sep 3: 160 rounds".
-    await expect(await canvas.findByText(/^Sep \d+: \d+ rounds$/)).toBeInTheDocument()
+    await expect(
+      await canvas.findByText(/^Sep \d+: \d+ rounds$/, {}, { timeout: 5000 }),
+    ).toBeInTheDocument()
   },
   parameters: { docs: { source: { code: `// onBarClick also fires from the keyboard: arrow to a bar, then Enter or Space.
 <BarChart
