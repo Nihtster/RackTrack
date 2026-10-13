@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { cn } from '../utils/cn';
 import { Card, type CardSize } from './Card';
+import { IconTile, type IconTileSize, type IconTileTone } from './IconTile';
 import { intentText, type Intent } from '../theme/intent';
 
 // lg is the original horizontal layout; md shrinks it. sm is a square (from
@@ -9,15 +10,13 @@ const sizeClasses = {
   sm: {
     root: 'justify-center gap-1 p-2', // square + column come from Card sm
     text: 'w-full text-center',
-    icon: 'size-8 [&>svg]:size-4',
-    label: 'text-[11px]',
+    label: 'text-caption',
     value: 'text-xl',
-    delta: 'text-[10px]',
+    delta: 'text-micro',
   },
   md: {
     root: 'gap-3 p-3',
     text: '',
-    icon: 'size-10 [&>svg]:size-5',
     label: 'text-xs',
     value: 'text-xl',
     delta: 'text-xs',
@@ -25,12 +24,16 @@ const sizeClasses = {
   lg: {
     root: 'gap-4 p-4',
     text: '',
-    icon: 'size-12 [&>svg]:size-6',
     label: 'text-sm',
     value: 'text-2xl',
     delta: 'text-xs',
   },
 } as const satisfies Record<CardSize, Record<string, string>>;
+
+// The icon tile steps with the card.
+const iconSizes: Record<CardSize, IconTileSize> = { sm: 'sm', md: 'md', lg: 'lg' };
+
+export type StatTileIconTone = IconTileTone;
 
 export interface StatTileProps {
   label: ReactNode;
@@ -40,6 +43,8 @@ export interface StatTileProps {
   deltaIntent?: Intent;
   /** Icon shown in a tile at the left. Sized by the tile's `size`. */
   icon?: ReactNode;
+  /** Color of the icon and its tile. Default is the plain accent look. */
+  iconTone?: StatTileIconTone;
   size?: CardSize;
   className?: string;
 }
@@ -50,6 +55,7 @@ export function StatTile({
   delta,
   deltaIntent = 'neutral',
   icon,
+  iconTone,
   size = 'md',
   className,
 }: StatTileProps) {
@@ -57,14 +63,9 @@ export function StatTile({
   return (
     <Card size={size} className={cn('flex items-center', s.root, className)}>
       {icon && (
-        <div
-          className={cn(
-            'flex shrink-0 items-center justify-center rounded-control bg-surface-raised text-accent-bright',
-            s.icon,
-          )}
-        >
+        <IconTile size={iconSizes[size]} tone={iconTone}>
           {icon}
-        </div>
+        </IconTile>
       )}
       <div className={cn('min-w-0', s.text)}>
         <div className={cn('truncate text-ink-muted', s.label)}>{label}</div>

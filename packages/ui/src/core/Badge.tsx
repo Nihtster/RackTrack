@@ -6,7 +6,7 @@ export type BadgeIntent = Intent;
 export type BadgeSize = 'sm' | 'md';
 
 const sizeClasses: Record<BadgeSize, string> = {
-  sm: 'px-1.5 py-0.5 text-[11px]',
+  sm: 'px-1.5 py-0.5 text-caption',
   md: 'px-2.5 py-1 text-xs',
 };
 

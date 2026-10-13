@@ -21,4 +21,7 @@ export const colors = {
   critical: '#EF5B67',
   // Critical text on its own tint, for badges.
   criticalSoft: '#F4737D',
+
+  // A hue for categories that are not a status.
+  violet: '#8B7CF6',
 } as const;

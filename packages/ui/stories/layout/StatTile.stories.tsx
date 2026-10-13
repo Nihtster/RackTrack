@@ -24,6 +24,24 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
 export const WithIcon: Story = { args: { icon: BoxIcon } }
+// The icon tile takes a tone, so a row of tiles can tell its categories apart.
+export const IconTones: Story = {
+  render: (args) => (
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {(['accent', 'success', 'warning', 'violet'] as const).map((tone) => (
+        <StatTile
+          key={tone}
+          {...args}
+          label={tone}
+          value="42"
+          delta={undefined}
+          icon={BoxIcon}
+          iconTone={tone}
+        />
+      ))}
+    </div>
+  ),
+}
 export const Warning: Story = {
   args: { label: 'Maintenance', value: '2', delta: 'Due Soon', deltaIntent: 'warning', icon: BoxIcon },
 }
