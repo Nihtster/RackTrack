@@ -5,7 +5,12 @@ import './storybook.css'
 const preview: Preview = {
   parameters: {
     layout: 'padded',
-    docs: { theme: racktrackTheme },
+    docs: {
+      theme: racktrackTheme,
+      // Adds a "Code" tab beside Controls / Actions / Interactions with the
+      // story's source.
+      codePanel: true,
+    },
     backgrounds: {
       options: {
         app: { name: 'app', value: '#0b1016' },

@@ -65,6 +65,8 @@ export {
 } from './data/Table'
 export { Pagination } from './data/Pagination'
 export type { PaginationProps } from './data/Pagination'
+export { ProgressBar } from './data/ProgressBar'
+export type { ProgressBarProps, ProgressBarSize } from './data/ProgressBar'
 export type {
   SortDirection,
   TableCellProps,
