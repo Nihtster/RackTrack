@@ -10,9 +10,11 @@ import {
   Plus,
   Skeleton,
   Tooltip,
+  useToast,
   Wrench,
 } from '@racktrack/ui';
 import type { IconComponent } from '@racktrack/ui';
+import { LogRoundsModal } from '../../components/LogRoundsModal';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { toDay } from '../../lib/day';
 import { AmmoInventoryCard } from './components/AmmoInventoryCard';
@@ -38,11 +40,12 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
 });
 
 // The three quick actions as icon buttons. Each has an accessible name, and a
-// tooltip says it on hover.
-function QuickActions() {
+// tooltip says it on hover. Logging rounds opens a modal; the others go to
+// their pages.
+function QuickActions({ onLogRounds }: { onLogRounds: () => void }) {
   const navigate = useNavigate();
   const actions: { label: string; icon: IconComponent; run: () => void; primary?: boolean }[] = [
-    { label: 'Log rounds', icon: Plus, run: () => navigate('/rounds/new'), primary: true },
+    { label: 'Log rounds', icon: Plus, run: onLogRounds, primary: true },
     { label: 'Add maintenance', icon: Wrench, run: () => navigate('/maintenance') },
     { label: 'Add ammo', icon: Package, run: () => navigate('/ammo') },
   ];
@@ -87,7 +90,9 @@ function DashboardSkeleton() {
 }
 
 export function Dashboard() {
-  const { data, error, isLoading } = useDashboardData();
+  const { data, error, isLoading, reload } = useDashboardData();
+  const { toast } = useToast();
+  const [logging, setLogging] = useState(false);
   // One "today" per mount, so every card agrees about what day it is.
   const [now] = useState(() => new Date());
   const today = toDay(now);
@@ -123,10 +128,27 @@ export function Dashboard() {
             <time dateTime={today} className="mr-2 hidden text-sm text-ink-muted sm:block">
               {dateFormat.format(now)}
             </time>
-            <QuickActions />
+            <QuickActions onLogRounds={() => setLogging(true)} />
           </>
         }
       />
+
+      {data && (
+        <LogRoundsModal
+          open={logging}
+          onOpenChange={setLogging}
+          firearms={data.firearms}
+          ammo={data.ammo}
+          onLogged={(session, firearm) => {
+            reload();
+            toast({
+              title: `Logged ${session.rounds.toLocaleString('en-US')} rounds`,
+              description: `${firearm.name} · ${session.location}`,
+              intent: 'success',
+            });
+          }}
+        />
+      )}
 
       {isLoading && <DashboardSkeleton />}
 

@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ToastProvider } from '@racktrack/ui';
 import { AppLayout } from './components/layout/AppLayout';
 import {
   AmmoInventory,
@@ -18,25 +19,27 @@ const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function App() {
   return (
-    <BrowserRouter basename={basename}>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Dashboard />} />
+    <ToastProvider>
+      <BrowserRouter basename={basename}>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Dashboard />} />
 
-          <Route path="/firearms" element={<FirearmsList />} />
-          <Route path="/firearms/new" element={<FirearmForm />} />
+            <Route path="/firearms" element={<FirearmsList />} />
+            <Route path="/firearms/new" element={<FirearmForm />} />
 
-          <Route path="/rounds" element={<RoundsHistory />} />
-          <Route path="/rounds/new" element={<LogSession />} />
+            <Route path="/rounds" element={<RoundsHistory />} />
+            <Route path="/rounds/new" element={<LogSession />} />
 
-          <Route path="/maintenance" element={<MaintenanceSchedule />} />
-          <Route path="/maintenance/history" element={<MaintenanceHistory />} />
+            <Route path="/maintenance" element={<MaintenanceSchedule />} />
+            <Route path="/maintenance/history" element={<MaintenanceHistory />} />
 
-          <Route path="/ammo" element={<AmmoInventory />} />
-          <Route path="/ammo/types" element={<AmmoTypes />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+            <Route path="/ammo" element={<AmmoInventory />} />
+            <Route path="/ammo/types" element={<AmmoTypes />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 
