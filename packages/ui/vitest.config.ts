@@ -14,6 +14,14 @@ export default mergeConfig(
   defineConfig({
     test: {
       projects: [
+        // Plain functions: page ranges, date math, key handling, snippet helpers.
+        {
+          test: {
+            name: 'unit',
+            environment: 'node',
+            include: ['src/**/*.test.ts', '.storybook/**/*.test.ts'],
+          },
+        },
         {
           extends: true,
           plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
