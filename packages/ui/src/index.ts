@@ -107,5 +107,38 @@ export { Skeleton } from './feedback/Skeleton'
 export { Spinner } from './feedback/Spinner'
 export type { SpinnerProps, SpinnerSize } from './feedback/Spinner'
 
+// icons
+export { Icon, StatusIcon } from './icons';
+export type {
+  ComponentIconProps,
+  IconComponent,
+  IconProps,
+  IconSize,
+  ImageIconProps,
+  StatusIconProps,
+} from './icons';
+export {
+  Calendar as CalendarIcon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CircleCheck,
+  CircleX,
+  Crosshair,
+  Info,
+  LayoutDashboard,
+  MenuIcon,
+  Package,
+  Pencil,
+  Plus,
+  Search as SearchIcon,
+  Target,
+  Trash2,
+  TriangleAlert,
+  Wrench,
+  X as CloseIcon,
+} from './icons';
+
 // utils
 export { cn } from './utils/cn'

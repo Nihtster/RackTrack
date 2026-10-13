@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Sidebar, type NavItem } from '../../src/nav/Sidebar'
+import { Crosshair, LayoutDashboard, Package, Target } from '../../src/icons'
 import { expect, userEvent, within } from 'storybook/test'
 
 const items: NavItem[] = [
-  { label: 'Dashboard', path: '/' },
+  { label: 'Dashboard', path: '/', icon: LayoutDashboard },
   {
     label: 'Firearms',
     path: '/firearms',
+    icon: Crosshair,
     subItems: [
       { label: 'All Firearms', path: '/firearms' },
       { label: 'Add Firearm', path: '/firearms/new' },
@@ -16,12 +18,13 @@ const items: NavItem[] = [
   {
     label: 'Rounds',
     path: '/rounds',
+    icon: Target,
     subItems: [
       { label: 'Log Session', path: '/rounds/new' },
       { label: 'History', path: '/rounds' },
     ],
   },
-  { label: 'Ammo', path: '/ammo' },
+  { label: 'Ammo', path: '/ammo', icon: Package },
 ]
 
 const meta = {
@@ -40,6 +43,11 @@ export const Default: Story = {}
 
 export const ActiveSubItem: Story = {
   args: { activePath: '/rounds/new' },
+}
+
+// Items without an icon still work, and keep their labels aligned with each other.
+export const WithoutIcons: Story = {
+  args: { items: items.map(({ icon: _icon, ...item }) => item) },
 }
 
 export const CustomBrand: Story = {

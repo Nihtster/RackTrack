@@ -1,5 +1,6 @@
 import { useState, type MouseEventHandler, type ReactNode } from 'react';
 import { cn } from '../utils/cn';
+import { ChevronRight, Icon, type IconComponent } from '../icons';
 
 export interface NavSubItem {
   label: string;
@@ -9,6 +10,8 @@ export interface NavSubItem {
 export interface NavItem {
   label: string;
   path: string;
+  /** Shown before the label, e.g. `icon: Target`. */
+  icon?: IconComponent;
   subItems?: NavSubItem[];
 }
 
@@ -96,23 +99,23 @@ export function Sidebar({
                     }
                   : undefined,
                 className: cn(
-                  'w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors',
+                  'w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors',
                   isActiveParent
                     ? 'bg-surface-raised text-ink font-medium'
                     : 'text-ink-muted hover:bg-surface-raised/60 hover:text-ink',
                 ),
                 children: (
                   <>
-                    <span>{item.label}</span>
+                    {item.icon && <Icon icon={item.icon} />}
+                    <span className="flex-1">{item.label}</span>
                     {hasSubItems && (
-                      <span
+                      <Icon
+                        icon={ChevronRight}
                         className={cn(
                           'text-ink-muted transition-transform',
                           isExpanded && 'rotate-90',
                         )}
-                      >
-                        ›
-                      </span>
+                      />
                     )}
                   </>
                 ),
@@ -128,7 +131,9 @@ export function Sidebar({
                           href: sub.path,
                           'aria-current': isActive ? 'page' : undefined,
                           className: cn(
-                            'block pl-8 pr-4 py-2 text-sm transition-colors',
+                            'block pr-4 py-2 text-sm transition-colors',
+                            // Line sub-items up with the parent's label, past its icon.
+                            item.icon ? 'pl-11' : 'pl-8',
                             isActive
                               ? 'text-ink font-medium'
                               : 'text-ink-muted hover:text-ink',

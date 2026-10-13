@@ -9,6 +9,7 @@ import {
   controlSize,
 } from '../theme/control';
 import { useFieldControl } from './fieldContext';
+import { Icon, ChevronDown } from '../icons';
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   size?: keyof typeof controlSize;
@@ -55,18 +56,10 @@ export function Select({
         {placeholder && <option value="">{placeholder}</option>}
         {children}
       </select>
-      <svg
-        className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-ink-muted"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="m6 9 6 6 6-6" />
-      </svg>
+      <Icon
+        icon={ChevronDown}
+        className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ink-muted"
+      />
     </div>
   );
 }

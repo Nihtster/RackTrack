@@ -4,6 +4,7 @@ import { controlFocusRing } from '../theme/control';
 import { intentFill } from '../theme/intent';
 import { motionDuration, motionSlide } from '../theme/motion';
 import { Button } from '../core/Button';
+import { Icon, StatusIcon, X } from '../icons';
 import { ToastContext, type ToastApi, type ToastOptions } from './toastContext';
 
 interface ToastEntry extends ToastOptions {
@@ -13,14 +14,6 @@ interface ToastEntry extends ToastOptions {
 const DEFAULT_DURATION = 3000;
 // A toast with a button (e.g. Undo) needs a moment longer to be noticed and used.
 const DEFAULT_ACTION_DURATION = 4000;
-
-// TODO(icon set): swap these inline SVGs for Icon components once #67 lands.
-const icons = {
-  neutral: 'M12 8v5m0 3h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-  success: 'm8 12 3 3 5-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-  warning: 'M12 9v4m0 3h.01M10.3 4 2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z',
-  critical: 'm9 9 6 6m0-6-6 6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-} as const;
 
 function ToastItem({
   toast,
@@ -71,18 +64,7 @@ function ToastItem({
       )}
     >
       <span className={cn('absolute inset-y-0 left-0 w-1', intentFill[intent])} aria-hidden="true" />
-      <svg
-        className="mt-0.5 size-5 shrink-0"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d={icons[intent]} />
-      </svg>
+      <StatusIcon intent={intent} size="md" className="mt-0.5" />
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium">{title}</div>
         {description && <div className="mt-0.5 text-sm text-ink-muted">{description}</div>}
@@ -109,9 +91,7 @@ function ToastItem({
           controlFocusRing,
         )}
       >
-        <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-          <path d="M6 6l12 12M18 6 6 18" />
-        </svg>
+        <Icon icon={X} size="xs" strokeWidth={2.5} />
       </button>
     </div>
   );

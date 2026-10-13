@@ -1,6 +1,7 @@
 import { cn } from '../utils/cn';
 import { Button, type ButtonSize } from '../core/Button';
 import { DOTS, paginationRange } from './paginationRange';
+import { Icon, ChevronLeft, ChevronRight } from '../icons';
 
 export interface PaginationProps {
   /** Current page, 1-based. */
@@ -19,23 +20,6 @@ export interface PaginationProps {
 }
 
 // TODO(icon set): swap for Icon components once #67 lands.
-function Chevron({ direction }: { direction: 'left' | 'right' }) {
-  return (
-    <svg
-      className="size-4"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d={direction === 'left' ? 'm15 6-6 6 6 6' : 'm9 6 6 6-6 6'} />
-    </svg>
-  );
-}
-
 // Controlled page buttons for long tables. The parent owns the page number and
 // slices its rows; this only renders the controls.
 export function Pagination({
@@ -65,7 +49,7 @@ export function Pagination({
             disabled={disabled || current === 1}
             onClick={() => onPageChange(current - 1)}
           >
-            <Chevron direction="left" />
+            <Icon icon={ChevronLeft} />
           </Button>
         </li>
         {items.map((item, i) =>
@@ -102,7 +86,7 @@ export function Pagination({
             disabled={disabled || current === pageCount}
             onClick={() => onPageChange(current + 1)}
           >
-            <Chevron direction="right" />
+            <Icon icon={ChevronRight} />
           </Button>
         </li>
       </ul>

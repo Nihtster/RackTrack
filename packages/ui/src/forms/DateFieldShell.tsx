@@ -25,6 +25,7 @@ import {
 } from '../theme/control';
 import { motionDuration, motionPop } from '../theme/motion';
 import { useFieldControl, useFieldLabelId } from './fieldContext';
+import { Icon, Calendar } from '../icons';
 
 // Internal: the field-styled button + popover that DatePicker and
 // DateRangePicker share. The picker supplies what to show and the calendar.
@@ -46,24 +47,6 @@ export interface DateFieldShellProps {
   ref?: Ref<HTMLButtonElement>;
   /** The calendar; call `close` once the user has finished choosing. */
   children: (close: () => void) => ReactNode;
-}
-
-function CalendarIcon() {
-  return (
-    <svg
-      className="size-4 shrink-0 text-ink-muted"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="4" width="18" height="18" rx="2" />
-      <path d="M16 2v4M8 2v4M3 10h18" />
-    </svg>
-  );
 }
 
 export function DateFieldShell({
@@ -141,7 +124,7 @@ export function DateFieldShell({
         )}
       >
         <span className="truncate">{display ?? placeholder}</span>
-        <CalendarIcon />
+        <Icon icon={Calendar} className="text-ink-muted" />
       </button>
       {hiddenInputs?.map(({ name, value }) => (
         <input key={name} type="hidden" name={name} value={value} />

@@ -2,6 +2,7 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import { cn } from '../utils/cn';
 import { Menu, type MenuItem } from './Menu';
 import { Button, type ButtonSize, type ButtonVariant } from './Button';
+import { Icon, ChevronDown } from '../icons';
 
 export interface SplitButtonProps {
   /** Main action label. */
@@ -18,23 +19,6 @@ export interface SplitButtonProps {
   /** Accessible name for the chevron button. */
   menuLabel?: string;
   className?: string;
-}
-
-function ChevronDown() {
-  return (
-    <svg
-      className="size-4"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
 }
 
 export function SplitButton({
@@ -75,7 +59,7 @@ export function SplitButton({
             aria-label={menuLabel}
             className="rounded-l-none border-l border-l-ink/20"
           >
-            <ChevronDown />
+            <Icon icon={ChevronDown} />
           </Button>
         }
       />

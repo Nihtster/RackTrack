@@ -13,6 +13,7 @@ import { cn } from '../utils/cn';
 import { controlFocusRing } from '../theme/control';
 import { motionDuration, motionFade, motionPop } from '../theme/motion';
 import { Card, CardBody, CardFooter, CardHeader } from '../layout/Card';
+import { Icon, X } from '../icons';
 
 export type ModalSize = 'sm' | 'md' | 'lg';
 
@@ -39,23 +40,6 @@ export interface ModalProps {
   /** Element to focus on open. Defaults to the first focusable one. */
   initialFocus?: RefObject<HTMLElement | null>;
   className?: string;
-}
-
-function CloseIcon() {
-  // TODO(icon set): swap for an Icon component once #67 lands.
-  return (
-    <svg
-      className="size-4"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      aria-hidden="true"
-    >
-      <path d="M6 6l12 12M18 6 6 18" />
-    </svg>
-  );
 }
 
 // Accessible dialog: focus is trapped and restored, Escape closes, the page
@@ -124,7 +108,7 @@ export function Modal({
                     controlFocusRing,
                   )}
                 >
-                  <CloseIcon />
+                  <Icon icon={X} strokeWidth={2.5} />
                 </button>
               </CardHeader>
               {children && (

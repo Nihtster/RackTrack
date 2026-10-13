@@ -2,6 +2,7 @@ import type { KeyboardEvent } from 'react';
 import { cn } from '../utils/cn';
 import { controlFocusRing } from '../theme/control';
 import { Input, type InputProps } from './Input';
+import { Icon, Search, X } from '../icons';
 
 export interface SearchInputProps
   extends Omit<InputProps, 'type' | 'value' | 'onChange' | 'leading' | 'trailing'> {
@@ -12,23 +13,6 @@ export interface SearchInputProps
 }
 
 // TODO(icon set): swap these inline SVGs for Icon components once #67 lands.
-function SearchIcon() {
-  return (
-    <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-    </svg>
-  );
-}
-
-function ClearIcon() {
-  return (
-    <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
-      <path d="M6 6l12 12M18 6 6 18" />
-    </svg>
-  );
-}
-
 // Controlled search box for list filters: search icon, clear button once there
 // is text, and Escape also clears.
 export function SearchInput({
@@ -54,7 +38,7 @@ export function SearchInput({
       value={value}
       onChange={(e) => onValueChange(e.target.value)}
       onKeyDown={handleKeyDown}
-      leading={<SearchIcon />}
+      leading={<Icon icon={Search} />}
       trailing={
         value ? (
           <button
@@ -66,7 +50,7 @@ export function SearchInput({
               controlFocusRing,
             )}
           >
-            <ClearIcon />
+            <Icon icon={X} size="xs" strokeWidth={2.5} />
           </button>
         ) : undefined
       }
