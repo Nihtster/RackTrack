@@ -13,6 +13,18 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      // `pnpm test:coverage`. Measures component source, not stories or tests.
+      // Keep vitest on 4.x: Vitest 5's report loader rejects the reporter that
+      // @storybook/addon-vitest registers (it exports it as "module.exports"), so the
+      // Testing widget's "Coverage" run fails with "must export a report class".
+      // Revisit when the addon is updated for Vitest 5.
+      coverage: {
+        provider: 'v8',
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: ['**/*.test.{ts,tsx}', 'src/index.ts'],
+        reporter: ['text-summary', 'html', 'lcov', 'json-summary'],
+        reportsDirectory: './coverage',
+      },
       projects: [
         // Plain functions: page ranges, date math, key handling, snippet helpers.
         {
