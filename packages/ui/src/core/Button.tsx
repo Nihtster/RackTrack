@@ -19,7 +19,8 @@ const variantClasses: Record<ButtonVariant, string> = {
   danger: 'bg-critical text-app hover:bg-critical/85',
   ghost: 'bg-transparent text-ink-muted hover:bg-surface-raised hover:text-ink',
   // Inline text action ("View All →"): no box, so drop height and padding.
-  link: 'h-auto pointer-coarse:h-auto px-0 bg-transparent text-accent-bright hover:text-accent hover:underline',
+  // The ::before grows the touch area to 44px without moving the text.
+  link: "h-auto pointer-coarse:h-auto px-0 bg-transparent text-accent-bright hover:text-accent hover:underline pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-3.5 pointer-coarse:before:content-['']",
 };
 
 interface ButtonBaseProps

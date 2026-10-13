@@ -31,7 +31,7 @@ const defaultRenderLink: RenderSidebarLink = ({ href, ...rest }) => (
   <a href={href} {...rest} />
 );
 
-interface SidebarProps {
+export interface SidebarProps {
   items: NavItem[];
   /** Current location path; drives active styling. */
   activePath: string;
@@ -69,8 +69,9 @@ export function Sidebar({
 
   return (
     <nav
+      aria-label="Main navigation"
       className={cn(
-        'w-60 h-screen bg-surface border-r border-border flex flex-col shrink-0',
+        'w-60 h-dvh bg-surface border-r border-border flex flex-col shrink-0',
         className,
       )}
     >
@@ -99,7 +100,7 @@ export function Sidebar({
                     }
                   : undefined,
                 className: cn(
-                  'w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors',
+                  'w-full flex items-center gap-3 px-4 py-2.5 pointer-coarse:py-3 text-sm text-left transition-colors',
                   isActiveParent
                     ? 'bg-surface-raised text-ink font-medium'
                     : 'text-ink-muted hover:bg-surface-raised/60 hover:text-ink',
@@ -131,7 +132,7 @@ export function Sidebar({
                           href: sub.path,
                           'aria-current': isActive ? 'page' : undefined,
                           className: cn(
-                            'block pr-4 py-2 text-sm transition-colors',
+                            'block pr-4 py-2 pointer-coarse:py-3 text-sm transition-colors',
                             // Line sub-items up with the parent's label, past its icon.
                             item.icon ? 'pl-11' : 'pl-8',
                             isActive

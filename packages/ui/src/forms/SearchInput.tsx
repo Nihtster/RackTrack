@@ -46,7 +46,7 @@ export function SearchInput({
             aria-label={clearLabel}
             onClick={() => onValueChange('')}
             className={cn(
-              'flex size-7 items-center justify-center rounded-control text-ink-muted transition-colors hover:text-ink',
+              'flex size-7 items-center justify-center rounded-control text-ink-muted transition-colors hover:text-ink pointer-coarse:size-11',
               controlFocusRing,
             )}
           >

@@ -68,7 +68,7 @@ export function Tabs<T extends string>({
               tabIndex={selected ? 0 : -1}
               onClick={() => change(item.value)}
               className={cn(
-                'relative -mb-px shrink-0 rounded-t-control border-b-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors',
+                'relative -mb-px shrink-0 rounded-t-control border-b-2 px-4 py-2.5 pointer-coarse:py-3 text-sm font-medium whitespace-nowrap transition-colors',
                 // Keyboard focus is a tint, not an outline: the tab list scrolls
                 // (overflow clips an offset ring) and an outline would cover the
                 // selected underline.

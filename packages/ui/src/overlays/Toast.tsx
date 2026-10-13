@@ -87,7 +87,8 @@ function ToastItem({
         aria-label="Dismiss notification"
         onClick={close}
         className={cn(
-          'flex size-6 shrink-0 items-center justify-center rounded-control text-ink-muted transition-colors hover:text-ink',
+          // Grows to a 44px target on touch; the negative margin keeps the toast's layout.
+          'flex size-6 shrink-0 items-center justify-center rounded-control text-ink-muted transition-colors hover:text-ink pointer-coarse:-m-2.5 pointer-coarse:size-11',
           controlFocusRing,
         )}
       >

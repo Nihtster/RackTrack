@@ -202,7 +202,7 @@ export function TableHeader({
           type="button"
           onClick={onSort}
           className={cn(
-            '-mx-1 inline-flex items-center gap-1 rounded-control px-1 py-0.5 font-medium transition-colors hover:text-ink',
+            '-mx-1 inline-flex items-center gap-1 rounded-control px-1 py-0.5 pointer-coarse:min-h-11 font-medium transition-colors hover:text-ink',
             numeric && 'flex-row-reverse',
             sorted && 'text-ink',
             controlFocusRing,

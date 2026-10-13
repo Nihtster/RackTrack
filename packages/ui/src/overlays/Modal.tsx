@@ -104,7 +104,7 @@ export function Modal({
                   aria-label="Close"
                   onClick={() => onOpenChange(false)}
                   className={cn(
-                    'ml-auto flex size-8 shrink-0 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink',
+                    'ml-auto flex size-8 shrink-0 items-center justify-center rounded-control text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink pointer-coarse:-m-1.5 pointer-coarse:size-11',
                     controlFocusRing,
                   )}
                 >

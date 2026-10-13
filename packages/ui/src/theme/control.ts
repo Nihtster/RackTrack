@@ -8,11 +8,12 @@ export const controlSize = {
   lg: 'h-12 px-6 text-base gap-2.5',
 } as const;
 
-// Square variant of controlSize, for icon-only controls.
+// Square variant of controlSize, for icon-only controls. Never shrinks: in a
+// tight flex row a squashed icon button is worse than a wrapped row.
 export const controlIconSize = {
-  sm: 'size-8 pointer-coarse:size-11 text-xs',
-  md: 'size-10 pointer-coarse:size-11 text-sm',
-  lg: 'size-12 text-base',
+  sm: 'size-8 shrink-0 pointer-coarse:size-11 text-xs',
+  md: 'size-10 shrink-0 pointer-coarse:size-11 text-sm',
+  lg: 'size-12 shrink-0 text-base',
 } as const satisfies Record<keyof typeof controlSize, string>;
 
 export const controlBase =
