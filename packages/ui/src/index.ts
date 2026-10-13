@@ -63,6 +63,8 @@ export {
   TableHeader,
   TableRow,
 } from './data/Table'
+export { Pagination } from './data/Pagination'
+export type { PaginationProps } from './data/Pagination'
 export type {
   SortDirection,
   TableCellProps,
