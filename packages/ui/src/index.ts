@@ -51,6 +51,28 @@ export type { DateRangePickerProps } from './forms/DateRangePicker'
 export { SearchInput } from './forms/SearchInput'
 export type { SearchInputProps } from './forms/SearchInput'
 
+// data
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableEmpty,
+  TableFoot,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from './data/Table'
+export type {
+  SortDirection,
+  TableCellProps,
+  TableEmptyProps,
+  TableHeaderProps,
+  TableProps,
+  TableRowProps,
+  TableSize,
+} from './data/Table'
+
 // feedback
 export { EmptyState } from './feedback/EmptyState'
 export type { EmptyStateProps } from './feedback/EmptyState'
