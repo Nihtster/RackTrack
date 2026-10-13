@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ToggleGroup } from '../../src/core/ToggleGroup'
 import { usage, ref } from '../../.storybook/usage'
+import { expect, userEvent, within } from 'storybook/test'
 
 const filters = [
   { value: 'all', label: 'All (5)' },
@@ -40,6 +41,22 @@ function Controlled(args: React.ComponentProps<typeof ToggleGroup>) {
 }
 
 export const FirearmFilter: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const radio = (name: string | RegExp) => canvas.getByRole('radio', { name })
+
+    await expect(radio(/All/)).toBeChecked()
+    await userEvent.click(radio(/Rifles/))
+    await expect(radio(/Rifles/)).toBeChecked()
+    await expect(radio(/All/)).not.toBeChecked()
+
+    // One tab stop; arrows move and select, wrapping at the end.
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(radio(/Shotguns/)).toBeChecked()
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(radio(/All/)).toBeChecked()
+  },
   parameters: { docs: { source: { code: usage('ToggleGroup', { state: `const [value, setValue] = useState('all')`, bind: { value: 'value', onChange: 'setValue' }, props: { options: ref('filters'), 'aria-label': 'Filter by type' } }) } } },
   render: (args) => <Controlled {...args} />,
 }

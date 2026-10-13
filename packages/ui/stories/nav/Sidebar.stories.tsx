@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Sidebar, type NavItem } from '../../src/nav/Sidebar'
+import { expect, userEvent, within } from 'storybook/test'
 
 const items: NavItem[] = [
   { label: 'Dashboard', path: '/' },
@@ -70,6 +71,15 @@ function InteractiveSidebar(args: React.ComponentProps<typeof Sidebar>) {
 
 // Wires the injected link renderer to local state, standing in for a router.
 export const Interactive: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await expect(canvas.getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
+
+    await userEvent.click(canvas.getByRole('link', { name: 'Ammo' }))
+    await expect(canvas.getByRole('link', { name: 'Ammo' })).toHaveAttribute('aria-current', 'page')
+    await expect(canvas.getByRole('link', { name: 'Dashboard' })).not.toHaveAttribute('aria-current')
+  },
   parameters: { docs: { source: { code: `// items: your nav tree (see the Data tab).
 // apps/web: inject the router's link so the sidebar stays router-agnostic.
 const { pathname } = useLocation()

@@ -4,6 +4,7 @@ import { Button } from '../../src/core/Button'
 import { Input } from '../../src/forms/Input'
 import { Field } from '../../src/forms/Field'
 import { Modal } from '../../src/overlays/Modal'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 const meta = {
   title: 'Overlays/Modal',
@@ -29,6 +30,20 @@ function Demo(args: React.ComponentProps<typeof Modal> & { label?: string; child
 }
 
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Open modal' }))
+
+    const dialog = await body.findByRole('dialog', { name: 'Edit firearm' })
+    await expect(dialog).toHaveAccessibleDescription('Update the details for this firearm.')
+
+    // Escape closes it and focus returns to the button that opened it.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+    await waitFor(() => expect(canvas.getByRole('button', { name: 'Open modal' })).toHaveFocus())
+  },
   parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
 
 <Button onClick={() => setOpen(true)}>Open modal</Button>
@@ -83,6 +98,23 @@ function FormModal(args: React.ComponentProps<typeof Modal>) {
 }
 
 export const WithFormAndFooter: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Add firearm' }))
+
+    const dialog = await body.findByRole('dialog', { name: 'Add firearm' })
+    // Focus moves into the dialog just after it opens; wait for that before typing.
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement))
+    const name = within(dialog).getByRole('textbox', { name: /Name/ })
+    await userEvent.click(name)
+    await userEvent.keyboard('Glock 19 Gen5')
+    await expect(name).toHaveValue('Glock 19 Gen5')
+
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Save' }))
+    await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+  },
   parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
 
 <Button onClick={() => setOpen(true)}>Add firearm</Button>
@@ -114,6 +146,21 @@ export const WithFormAndFooter: Story = {
 }
 
 export const LongContentScrolls: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Open long modal' }))
+
+    const dialog = await body.findByRole('dialog', { name: 'Maintenance history' })
+    // The body scrolls inside the dialog; the page itself stops scrolling.
+    const scroller = within(dialog).getByText('Cleaning session 1: bore, slide and lubrication.').closest('div.overflow-y-auto')!
+    await expect(scroller.scrollHeight).toBeGreaterThan(scroller.clientHeight)
+    await expect(getComputedStyle(canvasElement.ownerDocument.body).overflow).toBe('hidden')
+
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Close' }))
+    await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+  },
   parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
 
 // The body scrolls inside the dialog; the header and footer stay put.
@@ -140,6 +187,22 @@ export const LongContentScrolls: Story = {
 }
 
 export const BackdropClickDisabled: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Open (backdrop click disabled)' }))
+
+    const dialog = await body.findByRole('dialog', { name: 'Unsaved changes' })
+
+    // A click outside the panel does nothing...
+    await userEvent.click(dialog.parentElement!)
+    await expect(body.getByRole('dialog')).toBeInTheDocument()
+
+    // ...but Escape still closes it.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+  },
   parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
 
 // Escape and the close button still dismiss it; a stray click outside won't.

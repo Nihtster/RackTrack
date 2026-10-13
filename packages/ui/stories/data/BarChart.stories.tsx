@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
 import { Card, CardBody, CardHeader } from '../../src/layout/Card'
 import { BarChart } from '../../src/data/BarChart'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 // Deterministic sample: rounds per day for a month.
 const daily = Array.from({ length: 30 }, (_, i) => ({
@@ -95,7 +96,22 @@ function Clickable(args: React.ComponentProps<typeof BarChart>) {
 }
 
 // onBarClick receives the clicked row, so a page can open a day or month view.
-export const ClickableBars: Story = { parameters: { docs: { source: { code: `// onBarClick also fires from the keyboard: arrow to a bar, then Enter or Space.
+export const ClickableBars: Story = { 
+  play: async ({ canvasElement }) => {
+
+    const canvas = within(canvasElement)
+
+    // Bars exist at the start of the draw-in but have no height yet: wait for one that does.
+    const tallBar = () =>
+      [...canvasElement.querySelectorAll('.recharts-bar-rectangle path')].find(
+        (p) => p.getBoundingClientRect().height > 20,
+      )
+    await waitFor(() => expect(tallBar()).toBeDefined(), { timeout: 4000 })
+    await userEvent.click(tallBar()!)
+    // The story reports the clicked row, e.g. "Sep 3: 160 rounds".
+    await expect(await canvas.findByText(/^Sep \d+: \d+ rounds$/)).toBeInTheDocument()
+  },
+  parameters: { docs: { source: { code: `// onBarClick also fires from the keyboard: arrow to a bar, then Enter or Space.
 <BarChart
   data={days}
   xKey="date"

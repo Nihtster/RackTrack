@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
 import { Menu } from '../../src/core/Menu'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 const DotsIcon = (
   <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -44,7 +45,30 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const RowActions: Story = {}
+export const RowActions: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    const trigger = canvas.getByRole('button', { name: 'Firearm actions' })
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+    await userEvent.click(trigger)
+    const menu = await body.findByRole('menu')
+    await expect(within(menu).getAllByRole('menuitem')).toHaveLength(3)
+    await expect(within(menu).getByRole('menuitem', { name: 'Archive' })).toBeDisabled()
+
+    // Escape closes it and returns focus to the trigger.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body.queryByRole('menu')).not.toBeInTheDocument())
+    await waitFor(() => expect(trigger).toHaveFocus())
+
+    // Choosing an item closes the menu.
+    await userEvent.click(trigger)
+    await userEvent.click(await body.findByRole('menuitem', { name: 'Edit' }))
+    await waitFor(() => expect(body.queryByRole('menu')).not.toBeInTheDocument())
+  },
+}
 
 export const WithTextTrigger: Story = {
   args: { trigger: <Button variant="secondary">Export</Button>, placement: 'bottom-start' },

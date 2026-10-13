@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
 import { ToastProvider } from '../../src/overlays/Toast'
 import { useToast } from '../../src/overlays/toastContext'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 const meta = {
   title: 'Overlays/Toast',
@@ -44,6 +45,17 @@ function Buttons() {
 }
 
 export const Intents: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Success' }))
+    await expect(await body.findByRole('status')).toHaveTextContent('Session logged')
+
+    // Errors are announced assertively.
+    await userEvent.click(canvas.getByRole('button', { name: 'Error' }))
+    await expect(await body.findByRole('alert')).toHaveTextContent('Could not save')
+  },
   parameters: { docs: { source: { code: `// 1. Mount the provider once, near the app root
 <ToastProvider>
   <App />
@@ -106,6 +118,24 @@ function WithActions() {
 }
 
 export const ActionsStickyAndStacking: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    // An action button runs its handler and dismisses the toast.
+    await userEvent.click(canvas.getByRole('button', { name: 'With undo' }))
+    await expect(await body.findByText('Firearm deleted')).toBeInTheDocument()
+    await userEvent.click(body.getByRole('button', { name: 'Undo' }))
+    await expect(await body.findByText('Restored')).toBeInTheDocument()
+    await waitFor(() => expect(body.queryByText('Firearm deleted')).not.toBeInTheDocument())
+
+    // Six sticky toasts: only the newest four are kept.
+    await userEvent.click(canvas.getByRole('button', { name: /Fire six/ }))
+    await waitFor(() => expect(body.getByText('Toast 6')).toBeInTheDocument())
+    await expect(body.queryByText('Toast 1')).not.toBeInTheDocument()
+    await expect(body.queryByText('Toast 2')).not.toBeInTheDocument()
+    await expect(body.getByText('Toast 3')).toBeInTheDocument()
+  },
   parameters: { docs: { source: { code: `const { toast } = useToast()
 
 // With an action button. Defaults to 4s (3s without one) so there is time to use it.

@@ -14,6 +14,7 @@ import {
   TableRow,
   type SortDirection,
 } from '../../src/data/Table'
+import { expect, userEvent, within } from 'storybook/test'
 
 interface Session {
   id: number
@@ -178,7 +179,29 @@ function SortableTable(args: React.ComponentProps<typeof Table>) {
 }
 
 // Sorting is controlled: the parent owns the sort state and orders the rows.
-export const Sortable: Story = { parameters: { docs: { source: { code: `const [sort, setSort] = useState({ key: 'date', dir: 'desc' })
+export const Sortable: Story = { 
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    const header = (name: string) => canvas.getByRole('columnheader', { name })
+    const firstRow = () => canvas.getAllByRole('row')[1]
+
+    await expect(header('Date')).toHaveAttribute('aria-sort', 'descending')
+
+    await userEvent.click(within(header('Rounds')).getByRole('button'))
+    await expect(header('Rounds')).toHaveAttribute('aria-sort', 'ascending')
+    await expect(header('Date')).toHaveAttribute('aria-sort', 'none')
+    await expect(firstRow()).toHaveTextContent('80')
+
+    await userEvent.click(within(header('Rounds')).getByRole('button'))
+    await expect(header('Rounds')).toHaveAttribute('aria-sort', 'descending')
+    await expect(firstRow()).toHaveTextContent('200')
+
+    // Choosing a row marks it selected.
+    await userEvent.click(firstRow())
+    await expect(firstRow()).toHaveAttribute('aria-selected', 'true')
+  },
+  parameters: { docs: { source: { code: `const [sort, setSort] = useState({ key: 'date', dir: 'desc' })
 
 // Sorting is controlled: you order the rows, the header only reports clicks.
 const rows = [...sessions].sort((a, b) =>
@@ -219,6 +242,13 @@ function toggle(key) {
 ` } } }, render: (args) => <SortableTable {...args} /> }
 
 export const Empty: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The empty state spans the whole table, with its action.
+    await expect(canvas.getByText('No sessions logged')).toBeInTheDocument()
+    await expect(canvas.getByRole('button', { name: 'Log Rounds' })).toBeInTheDocument()
+  },
   render: (args) => (
     <Table {...args}>
       <Head />

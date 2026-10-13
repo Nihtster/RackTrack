@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Card, CardBody, CardHeader } from '../../src/layout/Card'
 import { PieChart } from '../../src/data/PieChart'
+import { expect, userEvent, within } from 'storybook/test'
 
 const ammo = [
   { caliber: '9mm', rounds: 1240 },
@@ -74,6 +75,16 @@ function Clickable(args: React.ComponentProps<typeof PieChart>) {
 }
 
 export const ClickableSlices: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // The legend rows are real buttons, so the chart works from the keyboard too.
+    await userEvent.click(canvas.getByRole('button', { name: /^9mm/ }))
+    await expect(canvas.getByText('9mm: 1,240 rounds')).toBeInTheDocument()
+
+    await userEvent.click(canvas.getByRole('button', { name: /^\.22 LR/ }))
+    await expect(canvas.getByText('.22 LR: 1,200 rounds')).toBeInTheDocument()
+  },
   parameters: { docs: { source: { code: `// Slices and legend rows are clickable; the legend rows are real buttons.
 <PieChart
   data={ammo}

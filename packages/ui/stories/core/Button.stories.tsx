@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
 import { Tooltip } from '../../src/core/Tooltip'
+import { expect, within } from 'storybook/test'
 
 const PlusIcon = (
   <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
@@ -34,10 +35,26 @@ export const Danger: Story = { args: { variant: 'danger', children: 'Delete' } }
 export const Ghost: Story = { args: { variant: 'ghost', children: 'View All' } }
 export const Link: Story = { args: { variant: 'link', children: 'View All →' } }
 export const WithLeadingIcon: Story = { args: { leadingIcon: PlusIcon } }
-export const Loading: Story = { args: { loading: true } }
+export const Loading: Story = { 
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // Regression: loading used `invisible`, which removed the label from the
+    // accessibility tree and left a nameless button.
+    const button = canvas.getByRole('button', { name: 'Add Firearm' })
+    await expect(button).toBeDisabled()
+    await expect(button).toHaveAttribute('aria-busy', 'true')
+  },
+  args: { loading: true } }
 export const Disabled: Story = { args: { disabled: true } }
 
 export const IconOnly: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // No visible text, so the aria-label is the button's only name.
+    await expect(canvas.getByRole('button', { name: 'More actions' })).toBeInTheDocument()
+  },
   args: { iconOnly: true, 'aria-label': 'More actions', variant: 'ghost', children: MoreIcon },
 }
 

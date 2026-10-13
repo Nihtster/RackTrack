@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
 import { ConfirmDialog } from '../../src/overlays/ConfirmDialog'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 const meta = {
   title: 'Overlays/ConfirmDialog',
@@ -47,7 +48,25 @@ function Demo(args: React.ComponentProps<typeof ConfirmDialog>) {
 }
 
 // Focus starts on Cancel; confirming shows a loading state, then closes.
-export const DangerDelete: Story = { parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
+export const DangerDelete: Story = { 
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Delete' }))
+
+    const dialog = await body.findByRole('alertdialog', { name: 'Delete this firearm?' })
+    // Focus starts on Cancel so a reflex Enter never deletes.
+    await waitFor(() => expect(within(dialog).getByRole('button', { name: 'Cancel' })).toHaveFocus())
+
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }))
+    await expect(within(dialog).getByRole('button', { name: 'Delete' })).toHaveAttribute('aria-busy', 'true')
+    await expect(within(dialog).getByRole('button', { name: 'Cancel' })).toBeDisabled()
+
+    await waitFor(() => expect(body.queryByRole('alertdialog')).not.toBeInTheDocument(), { timeout: 4000 })
+    await expect(canvas.getByText('Done.')).toBeInTheDocument()
+  },
+  parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
 const [saving, setSaving] = useState(false)
 
 <Button variant="danger" onClick={() => setOpen(true)}>Delete</Button>
@@ -70,6 +89,16 @@ const [saving, setSaving] = useState(false)
 ` } } }, args: { intent: 'danger' }, render: (args) => <Demo {...args} /> }
 
 export const Primary: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Log rounds' }))
+
+    const dialog = await body.findByRole('dialog', { name: 'Log this session?' })
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }))
+    await waitFor(() => expect(body.queryByRole('dialog')).not.toBeInTheDocument())
+  },
   parameters: { docs: { source: { code: `const [open, setOpen] = useState(false)
 
 <ConfirmDialog

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { SplitButton } from '../../src/core/SplitButton'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 const options = [
   { label: 'Quick log (last session)', onSelect: () => {} },
@@ -31,8 +32,34 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {}
+export const Primary: Story = {
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    // Two buttons: the main action and the chevron that opens the alternatives.
+    await expect(canvas.getByRole('button', { name: 'Log Rounds' })).toBeInTheDocument()
+    const chevron = canvas.getByRole('button', { name: 'More options' })
+
+    await userEvent.click(chevron)
+    const menu = await body.findByRole('menu')
+    await expect(within(menu).getByRole('menuitem', { name: 'Bulk add' })).toBeDisabled()
+
+    await userEvent.click(within(menu).getByRole('menuitem', { name: 'Import from CSV' }))
+    await waitFor(() => expect(body.queryByRole('menu')).not.toBeInTheDocument())
+  },
+}
 export const Secondary: Story = { args: { variant: 'secondary' } }
 export const Small: Story = { args: { size: 'sm' } }
-export const Loading: Story = { args: { loading: true } }
+export const Loading: Story = { 
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    // While loading, both halves are inactive but the main button keeps its name.
+    const main = canvas.getByRole('button', { name: 'Log Rounds' })
+    await expect(main).toBeDisabled()
+    await expect(main).toHaveAttribute('aria-busy', 'true')
+    await expect(canvas.getByRole('button', { name: 'More options' })).toBeDisabled()
+  },
+  args: { loading: true } }
 export const Disabled: Story = { args: { disabled: true } }
