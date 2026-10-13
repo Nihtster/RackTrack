@@ -36,4 +36,10 @@ function Controlled(args: React.ComponentProps<typeof DateRangePicker>) {
   )
 }
 
-export const InsideField: Story = { render: (args) => <Controlled {...args} /> }
+export const InsideField: Story = { parameters: { docs: { source: { code: `const [range, setRange] = useState({ start: '', end: '' })
+
+// onValueChange fires on both clicks: once with only the start, again when the end is set.
+<Field label="Report period" hint="Pick a start and an end date.">
+  <DateRangePicker value={range} onValueChange={setRange} />
+</Field>
+` } } }, render: (args) => <Controlled {...args} /> }

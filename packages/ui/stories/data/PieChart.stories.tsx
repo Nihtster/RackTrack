@@ -74,6 +74,16 @@ function Clickable(args: React.ComponentProps<typeof PieChart>) {
 }
 
 export const ClickableSlices: Story = {
+  parameters: { docs: { source: { code: `// Slices and legend rows are clickable; the legend rows are real buttons.
+<PieChart
+  data={ammo}
+  nameKey="caliber"
+  valueKey="rounds"
+  donut
+  aria-label="Rounds in stock by caliber"
+  onSliceClick={(row, { index }) => filterAmmoTable(row.caliber)}
+/>
+` } } },
   args: { donut: true },
   render: (args) => <Clickable {...args} />,
 }

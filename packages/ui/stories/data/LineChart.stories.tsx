@@ -76,6 +76,19 @@ function Clickable(args: React.ComponentProps<typeof LineChart>) {
 
 // onPointClick receives the row nearest the pointer, so a page can open a month view.
 export const ClickablePoints: Story = {
+  parameters: { docs: { source: { code: `// Fires for the point nearest the pointer; the row holds every series.
+<LineChart
+  data={months}
+  xKey="month"
+  series={[
+    { key: 'rounds', label: 'Rounds', color: 'accentBright' },
+    { key: 'spend', label: 'Spend ($)', color: 'warning' },
+  ]}
+  showDots
+  aria-label="Rounds per month"
+  onPointClick={(row, { index }) => openMonth(row.month)}
+/>
+` } } },
   args: { showDots: true },
   render: (args) => <Clickable {...args} />,
 }

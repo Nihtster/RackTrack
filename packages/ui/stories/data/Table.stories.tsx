@@ -178,7 +178,45 @@ function SortableTable(args: React.ComponentProps<typeof Table>) {
 }
 
 // Sorting is controlled: the parent owns the sort state and orders the rows.
-export const Sortable: Story = { render: (args) => <SortableTable {...args} /> }
+export const Sortable: Story = { parameters: { docs: { source: { code: `const [sort, setSort] = useState({ key: 'date', dir: 'desc' })
+
+// Sorting is controlled: you order the rows, the header only reports clicks.
+const rows = [...sessions].sort((a, b) =>
+  a[sort.key] > b[sort.key] ? (sort.dir === 'asc' ? 1 : -1) : sort.dir === 'asc' ? -1 : 1,
+)
+
+function toggle(key) {
+  setSort({ key, dir: sort.key === key && sort.dir === 'asc' ? 'desc' : 'asc' })
+}
+
+<Table highlightOnHover>
+  <TableHead>
+    <TableRow>
+      <TableHeader
+        sorted={sort.key === 'date' ? sort.dir : null}
+        onSort={() => toggle('date')}
+      >
+        Date
+      </TableHeader>
+      <TableHeader
+        numeric
+        sorted={sort.key === 'rounds' ? sort.dir : null}
+        onSort={() => toggle('rounds')}
+      >
+        Rounds
+      </TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    {rows.map((s) => (
+      <TableRow key={s.id}>
+        <TableCell>{s.date}</TableCell>
+        <TableCell numeric>{s.rounds}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+` } } }, render: (args) => <SortableTable {...args} /> }
 
 export const Empty: Story = {
   render: (args) => (

@@ -95,4 +95,12 @@ function Clickable(args: React.ComponentProps<typeof BarChart>) {
 }
 
 // onBarClick receives the clicked row, so a page can open a day or month view.
-export const ClickableBars: Story = { render: (args) => <Clickable {...args} /> }
+export const ClickableBars: Story = { parameters: { docs: { source: { code: `// onBarClick also fires from the keyboard: arrow to a bar, then Enter or Space.
+<BarChart
+  data={days}
+  xKey="date"
+  series={[{ key: 'rounds', label: 'Rounds', color: 'success' }]}
+  aria-label="Rounds fired per day, September"
+  onBarClick={(row, { seriesKey, index }) => openDay(row.date)}
+/>
+` } } }, render: (args) => <Clickable {...args} /> }

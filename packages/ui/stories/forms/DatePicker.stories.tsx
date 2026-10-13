@@ -33,4 +33,9 @@ function Controlled(args: React.ComponentProps<typeof DatePicker>) {
   )
 }
 
-export const InsideField: Story = { render: (args) => <Controlled {...args} /> }
+export const InsideField: Story = { parameters: { docs: { source: { code: `const [value, setValue] = useState('')
+
+<Field label="Last maintenance" hint="When you last cleaned it.">
+  <DatePicker value={value} onValueChange={setValue} />
+</Field>
+` } } }, render: (args) => <Controlled {...args} /> }

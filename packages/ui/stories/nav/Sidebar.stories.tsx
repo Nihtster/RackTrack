@@ -27,7 +27,8 @@ const meta = {
   title: 'Nav/Sidebar',
   component: Sidebar,
   tags: ['autodocs'],
-  parameters: { layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen', sampleData: { items } },
+  argTypes: { items: { table: { disable: true } } },
   args: { items, activePath: '/' },
 } satisfies Meta<typeof Sidebar>
 
@@ -69,5 +70,15 @@ function InteractiveSidebar(args: React.ComponentProps<typeof Sidebar>) {
 
 // Wires the injected link renderer to local state, standing in for a router.
 export const Interactive: Story = {
+  parameters: { docs: { source: { code: `// items: your nav tree (see the Data tab).
+// apps/web: inject the router's link so the sidebar stays router-agnostic.
+const { pathname } = useLocation()
+
+<Sidebar
+  items={items}
+  activePath={pathname}
+  renderLink={({ href, ...rest }) => <Link to={href} {...rest} />}
+/>
+` } } },
   render: (args) => <InteractiveSidebar {...args} />,
 }

@@ -23,6 +23,12 @@ const items = [
 const meta = {
   title: 'Core/Menu',
   component: Menu,
+  // onSelect handlers aren't serializable, so the Data tab shows labels and disabled flags.
+  parameters: {
+    sampleData: {
+      items: items.map(({ label, disabled }) => ({ label, ...(disabled && { disabled }) })),
+    },
+  },
   tags: ['autodocs'],
   args: {
     items,
