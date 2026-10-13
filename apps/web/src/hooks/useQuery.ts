@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface QueryResult<T> {
   data: T | undefined;
   error: Error | undefined;
   isLoading: boolean;
+  /** Runs the fetch again, keeping the current data on screen meanwhile. */
+  refetch: () => void;
 }
 
 /**
@@ -12,11 +14,12 @@ export interface QueryResult<T> {
  * A deliberately small stand-in for a data-fetching library.
  */
 export function useQuery<T>(fetcher: () => Promise<T>): QueryResult<T> {
-  const [state, setState] = useState<QueryResult<T>>({
+  const [state, setState] = useState<Omit<QueryResult<T>, 'refetch'>>({
     data: undefined,
     error: undefined,
     isLoading: true,
   });
+  const [version, setVersion] = useState(0);
 
   useEffect(() => {
     let current = true;
@@ -33,7 +36,9 @@ export function useQuery<T>(fetcher: () => Promise<T>): QueryResult<T> {
     return () => {
       current = false;
     };
-  }, [fetcher]);
+  }, [fetcher, version]);
 
-  return state;
+  const refetch = useCallback(() => setVersion((v) => v + 1), []);
+
+  return { ...state, refetch };
 }

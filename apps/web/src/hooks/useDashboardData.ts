@@ -8,6 +8,8 @@ export function useDashboardData(): {
   data: DashboardData | undefined;
   error: Error | undefined;
   isLoading: boolean;
+  /** Loads everything again, e.g. after logging a session. */
+  reload: () => void;
 } {
   const firearms = useQuery(api.firearms);
   const ammo = useQuery(api.ammo);
@@ -28,5 +30,7 @@ export function useDashboardData(): {
     };
   }, [firearms.data, ammo.data, sessions.data, maintenance.data]);
 
-  return { data, error, isLoading };
+  const reload = () => queries.forEach((q) => q.refetch());
+
+  return { data, error, isLoading, reload };
 }
