@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react-vite'
+import { collapseLongArrays } from './sourceTransform'
 import { racktrackTheme } from './theme'
 import './storybook.css'
 
@@ -10,6 +11,8 @@ const preview: Preview = {
       // Adds a "Code" tab beside Controls / Actions / Interactions with the
       // story's source.
       codePanel: true,
+      // Long inline arrays become `data={data}`; see the Data tab for the array.
+      source: { transform: (code: string) => collapseLongArrays(code) },
     },
     backgrounds: {
       options: {

@@ -44,6 +44,7 @@ const meta = {
   component: Table,
   tags: ['autodocs'],
   args: { children: null },
+  parameters: { sampleData: { sessions } },
   argTypes: { size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] } },
 } satisfies Meta<typeof Table>
 

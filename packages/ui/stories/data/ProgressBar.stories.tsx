@@ -46,16 +46,18 @@ function stockIntent(percent: number): Intent {
   return 'success'
 }
 
+const ammo = [
+  { caliber: '9mm', rounds: 1240, pct: 62 },
+  { caliber: '5.56x45mm', rounds: 680, pct: 34 },
+  { caliber: '.22 LR', rounds: 1200, pct: 80 },
+  { caliber: '12 Gauge', rounds: 120, pct: 24 },
+  { caliber: '.308 Winchester', rounds: 90, pct: 18 },
+]
+
 export const AmmoStock: Story = {
   render: () => (
     <div className="space-y-4">
-      {[
-        { caliber: '9mm', rounds: 1240, pct: 62 },
-        { caliber: '5.56x45mm', rounds: 680, pct: 34 },
-        { caliber: '.22 LR', rounds: 1200, pct: 80 },
-        { caliber: '12 Gauge', rounds: 120, pct: 24 },
-        { caliber: '.308 Winchester', rounds: 90, pct: 18 },
-      ].map((a) => (
+      {ammo.map((a) => (
         <ProgressBar
           key={a.caliber}
           label={`${a.caliber} · ${a.rounds.toLocaleString()} rds`}
@@ -67,3 +69,6 @@ export const AmmoStock: Story = {
     </div>
   ),
 }
+
+// Set outside the story object so it stays out of the Code tab's source.
+AmmoStock.parameters = { ...AmmoStock.parameters, sampleData: { ammo } }
