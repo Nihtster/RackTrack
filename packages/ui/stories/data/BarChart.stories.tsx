@@ -101,12 +101,29 @@ export const ClickableBars: Story = {
 
     const canvas = within(canvasElement)
 
-    // Bars exist at the start of the draw-in but have no height yet: wait for one that does.
+    // Bars exist at the start of the draw-in and a click during it is lost. Wait
+    // until one has height and has stopped growing, which takes longer on a slow
+    // machine than on a fast one.
     const tallBar = () =>
       [...canvasElement.querySelectorAll('.recharts-bar-rectangle path')].find(
         (p) => p.getBoundingClientRect().height > 20,
       )
-    await waitFor(() => expect(tallBar()).toBeDefined(), { timeout: 10000 })
+    let lastHeight = -1
+    let stableChecks = 0
+    await waitFor(
+      () => {
+        const height = tallBar()?.getBoundingClientRect().height ?? -1
+        stableChecks = height > 20 && Math.abs(height - lastHeight) < 0.5 ? stableChecks + 1 : 0
+        lastHeight = height
+        expect(stableChecks).toBeGreaterThanOrEqual(4)
+      },
+      { timeout: 20000, interval: 150 },
+    )
+    // Moving onto a bar makes Recharts re-render, which can replace the element,
+    // and a click aimed at the old one is lost. Hover first, let it settle, then
+    // click the element that is there now.
+    await userEvent.hover(tallBar()!)
+    await new Promise((resolve) => setTimeout(resolve, 250))
     await userEvent.click(tallBar()!)
     // The story reports the clicked row, e.g. "Sep 3: 160 rounds".
     await expect(
