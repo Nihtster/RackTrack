@@ -12,6 +12,7 @@ import {
   useInteractions,
   useMergeRefs,
   useRole,
+  useTransitionStatus,
 } from '@floating-ui/react';
 import { cn } from '../utils/cn';
 import {
@@ -22,6 +23,7 @@ import {
   controlFocusRing,
   controlSize,
 } from '../theme/control';
+import { motionDuration, motionPop } from '../theme/motion';
 import { useFieldControl } from './fieldContext';
 
 // Internal: the field-styled button + popover that DatePicker and
@@ -98,6 +100,8 @@ export function DateFieldShell({
     useRole(context, { role: 'dialog' }),
   ]);
 
+  const { isMounted, status } = useTransitionStatus(context, { duration: motionDuration });
+
   // `ref` is a plain prop in React 19, not a ref object read during render.
   // oxlint-disable-next-line react/refs
   const triggerRef = useMergeRefs([refs.setReference, ref]);
@@ -131,7 +135,7 @@ export function DateFieldShell({
         <input key={name} type="hidden" name={name} value={value} />
       ))}
 
-      {open && (
+      {isMounted && (
         <FloatingPortal>
           <FloatingFocusManager context={context} modal={false} initialFocus={-1}>
             <div
@@ -139,9 +143,12 @@ export function DateFieldShell({
               style={floatingStyles}
               {...getFloatingProps()}
               aria-label={popoverLabel}
-              className="z-50 shadow-lg"
+              className="z-50"
             >
-              {children(() => setOpen(false))}
+              {/* Inner element carries the motion; the outer one is positioned. */}
+              <div data-status={status} className={cn('shadow-lg', motionPop)}>
+                {children(() => setOpen(false))}
+              </div>
             </div>
           </FloatingFocusManager>
         </FloatingPortal>

@@ -20,10 +20,12 @@ import {
   useListNavigation,
   useMergeRefs,
   useRole,
+  useTransitionStatus,
   type Placement,
 } from '@floating-ui/react';
 import { cn } from '../utils/cn';
 import { controlFocusRing } from '../theme/control';
+import { motionDuration, motionPop } from '../theme/motion';
 
 export interface MenuItem {
   label: ReactNode;
@@ -65,6 +67,8 @@ export function Menu({
     useListNavigation(context, { listRef, activeIndex, onNavigate: setActiveIndex }),
   ]);
 
+  const { isMounted, status } = useTransitionStatus(context, { duration: motionDuration });
+
   // `ref` is a plain prop in React 19, not a ref object read during render.
   // oxlint-disable-next-line react/refs
   const ref = useMergeRefs([refs.setReference, trigger.props.ref]);
@@ -72,18 +76,25 @@ export function Menu({
   return (
     <>
       {cloneElement(trigger, getReferenceProps({ ref }))}
-      {open && (
+      {isMounted && (
         <FloatingPortal>
           <FloatingFocusManager context={context} modal={false} initialFocus={-1}>
+            {/* Outer element is positioned by Floating UI (it owns `transform`);
+                the inner one carries the enter/exit motion. */}
             <div
               ref={refs.setFloating}
               style={floatingStyles}
               {...getFloatingProps()}
-              className={cn(
-                'z-50 min-w-40 rounded-control border border-border bg-surface-raised p-1 shadow-lg',
-                className,
-              )}
+              className="z-50"
             >
+              <div
+                data-status={status}
+                className={cn(
+                  'min-w-40 rounded-control border border-border bg-surface-raised p-1 shadow-lg',
+                  motionPop,
+                  className,
+                )}
+              >
               {items.map((item, i) => (
                 <button
                   key={i}
@@ -110,6 +121,7 @@ export function Menu({
                   {item.label}
                 </button>
               ))}
+              </div>
             </div>
           </FloatingFocusManager>
         </FloatingPortal>

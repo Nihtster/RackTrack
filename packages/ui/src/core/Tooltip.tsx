@@ -18,9 +18,11 @@ import {
   useInteractions,
   useMergeRefs,
   useRole,
+  useTransitionStatus,
   type Placement,
 } from '@floating-ui/react';
 import { cn } from '../utils/cn';
+import { motionDuration, motionPop } from '../theme/motion';
 
 export interface TooltipProps {
   /** Tooltip content. Keep it short; it is a hint, not the accessible name. */
@@ -58,6 +60,8 @@ export function Tooltip({
     useRole(context, { role: 'tooltip' }),
   ]);
 
+  const { isMounted, status } = useTransitionStatus(context, { duration: motionDuration });
+
   // `ref` is a plain prop in React 19, not a ref object read during render.
   // oxlint-disable-next-line react/refs
   const ref = useMergeRefs([refs.setReference, children.props.ref]);
@@ -65,18 +69,26 @@ export function Tooltip({
   return (
     <>
       {cloneElement(children, getReferenceProps({ ref }))}
-      {open && (
+      {isMounted && (
         <FloatingPortal>
+          {/* Outer element is positioned by Floating UI (it owns `transform`);
+              the inner one carries the enter/exit motion. */}
           <div
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
-            className={cn(
-              'z-50 max-w-xs rounded-control border border-border bg-surface-raised px-2.5 py-1.5 text-xs text-ink shadow-lg',
-              className,
-            )}
+            className="z-50"
           >
-            {content}
+            <div
+              data-status={status}
+              className={cn(
+                'max-w-xs rounded-control border border-border bg-surface-raised px-2.5 py-1.5 text-xs text-ink shadow-lg',
+                motionPop,
+                className,
+              )}
+            >
+              {content}
+            </div>
           </div>
         </FloatingPortal>
       )}

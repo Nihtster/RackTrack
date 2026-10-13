@@ -32,7 +32,8 @@ domain knowledge is left in it.
   - `feedback/`: loading and empty states (Spinner, Loading, Skeleton, EmptyState)
   - `forms/`: Field (label, hint, error wiring), Input, Textarea, Select, SearchInput, Calendar, RangeCalendar, DatePicker, DateRangePicker
   - `data/`: Table (sortable headers, empty state), Pagination, ProgressBar, BarChart, LineChart, PieChart, RadarChart (Recharts, themed; bar, line and pie are clickable)
-  - add `overlays/` as those components land
+  - `overlays/`: Modal, ConfirmDialog, Toast (+ `useToast`). Menu and Tooltip live in
+    `core/` but share the enter/exit motion in `theme/motion.ts`
 - `stories/<group>/Foo.stories.tsx`: its stories (kept out of `src`); the
   Storybook title uses the same group (`Core/Button`)
 - `src/hooks/`: shared internals (e.g. `useRovingSelection`), not exported

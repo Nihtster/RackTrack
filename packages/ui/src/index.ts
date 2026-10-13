@@ -51,6 +51,16 @@ export type { DateRangePickerProps } from './forms/DateRangePicker'
 export { SearchInput } from './forms/SearchInput'
 export type { SearchInputProps } from './forms/SearchInput'
 
+// overlays
+export { Modal } from './overlays/Modal'
+export type { ModalProps, ModalSize } from './overlays/Modal'
+export { ConfirmDialog } from './overlays/ConfirmDialog'
+export type { ConfirmDialogProps } from './overlays/ConfirmDialog'
+export { ToastProvider } from './overlays/Toast'
+export type { ToastProviderProps } from './overlays/Toast'
+export { useToast } from './overlays/toastContext'
+export type { ToastApi, ToastOptions } from './overlays/toastContext'
+
 // data
 export {
   Table,
