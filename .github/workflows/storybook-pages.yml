@@ -1,0 +1,83 @@
+name: Storybook (GitHub Pages)
+
+# Publishes the UI package's Storybook to GitHub Pages whenever the UI package
+# (or the app's public assets, which Storybook serves) changes on main:
+#   https://nihtster.github.io/RackTrack/storybook/
+#
+# One-time setup: Settings > Pages > Source = "GitHub Actions" (already set).
+#
+# The site is assembled as a folder, with Storybook under /storybook/ and a small
+# index page that forwards to it, so the web app can later be published at the
+# root of the same site without moving Storybook.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/ui/**'
+      - 'apps/web/public/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/storybook-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once, and let a deploy that has started finish rather
+# than cancelling it half-way.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm --filter @racktrack/ui build-storybook
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r packages/ui/storybook-static _site/storybook
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=storybook/">
+          <title>RackTrack</title>
+          <a href="storybook/">RackTrack component library</a>
+          HTML
+          # Pages runs files through Jekyll unless told not to; folders starting
+          # with an underscore (Storybook has some) would be dropped.
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
