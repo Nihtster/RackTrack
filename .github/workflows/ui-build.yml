@@ -1,0 +1,50 @@
+name: UI build
+
+# Build check for @racktrack/ui. Runs on every push (any branch) that touches the
+# UI package or what it is built from, so a bad commit is caught on its own
+# branch before a pull request is opened. The pull request shows these results
+# because the checks are attached to the commit.
+on:
+  push:
+    paths:
+      - 'packages/ui/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ui-build.yml'
+  workflow_dispatch:
+
+# A newer commit on the same branch supersedes a run that is still going.
+concurrency:
+  group: ui-build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Lint, typecheck and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter @racktrack/ui lint
+
+      - name: Typecheck
+        run: pnpm --filter @racktrack/ui typecheck
+
+      # Fails the check if any story or its imports no longer compile.
+      - name: Build Storybook
+        run: pnpm --filter @racktrack/ui build-storybook

@@ -15,7 +15,7 @@ const STEP_KEYS: Record<string, 1 | -1> = {
 // Index to move to for a key press, or undefined if the key isn't navigation.
 // `enabled` holds the indexes of non-disabled items; `current` is the selected
 // item's index. Arrow keys wrap around.
-function targetIndex(key: string, enabled: number[], current: number) {
+export function targetIndex(key: string, enabled: number[], current: number) {
   if (key === 'Home') return enabled[0];
   if (key === 'End') return enabled[enabled.length - 1];
 

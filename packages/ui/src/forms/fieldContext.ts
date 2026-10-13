@@ -2,6 +2,8 @@ import { createContext, useContext } from 'react';
 
 export interface FieldContextValue {
   id: string;
+  /** Id of the <label>, for controls whose own text should join the name. */
+  labelId: string;
   describedBy?: string;
   invalid: boolean;
   required: boolean;
@@ -32,4 +34,10 @@ export function useFieldControl({
     'aria-invalid': (invalid ?? field?.invalid) || undefined,
     required: required ?? field?.required,
   };
+}
+
+// For controls that show a value as text (date pickers): the accessible name
+// should be "<label> <value>", not just the label. Returns undefined outside a Field.
+export function useFieldLabelId() {
+  return useContext(FieldContext)?.labelId;
 }

@@ -1,0 +1,58 @@
+name: UI tests
+
+# Test check for @racktrack/ui: every story is rendered and exercised in a real
+# browser (render, interactions and accessibility), plus the unit tests. Kept
+# separate from "UI build" so a build failure and a test failure read as
+# different checks. Same triggers: any push that touches the UI package, which
+# includes a merge into main.
+on:
+  push:
+    paths:
+      - 'packages/ui/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - '.github/workflows/ui-test.yml'
+  workflow_dispatch:
+
+# A newer commit on the same branch supersedes a run that is still going.
+concurrency:
+  group: ui-test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Stories, interactions, accessibility and unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Stories run as tests in a real browser, so Chromium has to be installed.
+      - name: Install browser
+        run: pnpm --filter @racktrack/ui exec playwright install --with-deps chromium
+
+      - name: Test with coverage
+        run: pnpm --filter @racktrack/ui test:coverage
+
+      # Kept even when tests fail: the report shows what ran.
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-coverage
+          path: packages/ui/coverage
+          if-no-files-found: ignore
+          retention-days: 14

@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
 import { Card, CardBody, CardHeader } from '../../src/layout/Card'
 import { BarChart } from '../../src/data/BarChart'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 // Deterministic sample: rounds per day for a month.
 const daily = Array.from({ length: 30 }, (_, i) => ({
@@ -95,4 +96,46 @@ function Clickable(args: React.ComponentProps<typeof BarChart>) {
 }
 
 // onBarClick receives the clicked row, so a page can open a day or month view.
-export const ClickableBars: Story = { render: (args) => <Clickable {...args} /> }
+export const ClickableBars: Story = { 
+  play: async ({ canvasElement }) => {
+
+    const canvas = within(canvasElement)
+
+    // Bars exist at the start of the draw-in and a click during it is lost. Wait
+    // until one has height and has stopped growing, which takes longer on a slow
+    // machine than on a fast one.
+    const tallBar = () =>
+      [...canvasElement.querySelectorAll('.recharts-bar-rectangle path')].find(
+        (p) => p.getBoundingClientRect().height > 20,
+      )
+    let lastHeight = -1
+    let stableChecks = 0
+    await waitFor(
+      () => {
+        const height = tallBar()?.getBoundingClientRect().height ?? -1
+        stableChecks = height > 20 && Math.abs(height - lastHeight) < 0.5 ? stableChecks + 1 : 0
+        lastHeight = height
+        expect(stableChecks).toBeGreaterThanOrEqual(4)
+      },
+      { timeout: 20000, interval: 150 },
+    )
+    // Moving onto a bar makes Recharts re-render, which can replace the element,
+    // and a click aimed at the old one is lost. Hover first, let it settle, then
+    // click the element that is there now.
+    await userEvent.hover(tallBar()!)
+    await new Promise((resolve) => setTimeout(resolve, 250))
+    await userEvent.click(tallBar()!)
+    // The story reports the clicked row, e.g. "Sep 3: 160 rounds".
+    await expect(
+      await canvas.findByText(/^Sep \d+: \d+ rounds$/, {}, { timeout: 5000 }),
+    ).toBeInTheDocument()
+  },
+  parameters: { docs: { source: { code: `// onBarClick also fires from the keyboard: arrow to a bar, then Enter or Space.
+<BarChart
+  data={days}
+  xKey="date"
+  series={[{ key: 'rounds', label: 'Rounds', color: 'success' }]}
+  aria-label="Rounds fired per day, September"
+  onBarClick={(row, { seriesKey, index }) => openDay(row.date)}
+/>
+` } } }, render: (args) => <Clickable {...args} /> }

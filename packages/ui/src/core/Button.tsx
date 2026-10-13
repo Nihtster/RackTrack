@@ -13,7 +13,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'link
 export type ButtonSize = keyof typeof controlSize;
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-ink hover:bg-accent-bright',
+  primary: 'bg-accent-solid text-ink hover:bg-accent-solid-hover',
   secondary:
     'bg-surface-raised text-ink border border-border hover:border-accent hover:text-accent-bright',
   danger: 'bg-critical text-app hover:bg-critical/85',
@@ -78,8 +78,10 @@ export function Button({
       )}
       {...rest}
     >
-      {/* Content stays in flow (invisible while loading) so width doesn't jump. */}
-      <span className={cn('inline-flex items-center gap-[inherit]', loading && 'invisible')}>
+      {/* Content stays in flow while loading so the width doesn't jump. It is made
+          transparent, not `invisible`: that would remove the label from the
+          accessibility tree and leave a nameless button. */}
+      <span className={cn('inline-flex items-center gap-[inherit]', loading && 'opacity-0')}>
         {leadingIcon}
         {children}
         {trailingIcon}

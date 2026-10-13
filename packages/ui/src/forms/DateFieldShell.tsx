@@ -12,6 +12,7 @@ import {
   useInteractions,
   useMergeRefs,
   useRole,
+  useTransitionStatus,
 } from '@floating-ui/react';
 import { cn } from '../utils/cn';
 import {
@@ -22,7 +23,8 @@ import {
   controlFocusRing,
   controlSize,
 } from '../theme/control';
-import { useFieldControl } from './fieldContext';
+import { motionDuration, motionPop } from '../theme/motion';
+import { useFieldControl, useFieldLabelId } from './fieldContext';
 
 // Internal: the field-styled button + popover that DatePicker and
 // DateRangePicker share. The picker supplies what to show and the calendar.
@@ -85,6 +87,18 @@ export function DateFieldShell({
     invalid,
   });
 
+  // The button's visible text is the chosen date (or the placeholder), so the
+  // accessible name has to include it: a bare aria-label would hide the value
+  // from screen readers. In a Field, name it by the field's label plus itself.
+  const labelId = useFieldLabelId();
+  const shown = display ?? placeholder;
+  const nameProps =
+    labelId && control.id
+      ? { 'aria-labelledby': `${labelId} ${control.id}` }
+      : rest['aria-label']
+        ? { 'aria-label': `${rest['aria-label']}: ${shown}` }
+        : {};
+
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
@@ -98,6 +112,8 @@ export function DateFieldShell({
     useRole(context, { role: 'dialog' }),
   ]);
 
+  const { isMounted, status } = useTransitionStatus(context, { duration: motionDuration });
+
   // `ref` is a plain prop in React 19, not a ref object read during render.
   // oxlint-disable-next-line react/refs
   const triggerRef = useMergeRefs([refs.setReference, ref]);
@@ -108,7 +124,7 @@ export function DateFieldShell({
         ref={triggerRef}
         type="button"
         disabled={disabled}
-        aria-label={rest['aria-label']}
+        {...nameProps}
         aria-haspopup="dialog"
         aria-expanded={open}
         {...control}
@@ -131,7 +147,7 @@ export function DateFieldShell({
         <input key={name} type="hidden" name={name} value={value} />
       ))}
 
-      {open && (
+      {isMounted && (
         <FloatingPortal>
           <FloatingFocusManager context={context} modal={false} initialFocus={-1}>
             <div
@@ -139,9 +155,12 @@ export function DateFieldShell({
               style={floatingStyles}
               {...getFloatingProps()}
               aria-label={popoverLabel}
-              className="z-50 shadow-lg"
+              className="z-50"
             >
-              {children(() => setOpen(false))}
+              {/* Inner element carries the motion; the outer one is positioned. */}
+              <div data-status={status} className={cn('shadow-lg', motionPop)}>
+                {children(() => setOpen(false))}
+              </div>
             </div>
           </FloatingFocusManager>
         </FloatingPortal>

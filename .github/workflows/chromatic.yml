@@ -1,0 +1,65 @@
+name: Chromatic
+
+# Visual tests: publishes the UI package's Storybook to Chromatic, which snapshots
+# every story and compares it with the accepted baseline. Changes show up for
+# review in Chromatic; they do not fail this job (see exitZeroOnChanges).
+#
+# Needs a repository secret named CHROMATIC_PROJECT_TOKEN
+# (Settings > Secrets and variables > Actions). Never commit the token.
+on:
+  push:
+    paths:
+      - 'packages/ui/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/chromatic.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: chromatic-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  chromatic:
+    name: Visual tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Exposed as env so steps can check whether it is set (secrets can't be
+      # used directly in `if:`).
+      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so Chromatic can work out what changed (TurboSnap).
+          fetch-depth: 0
+
+      - name: Token missing
+        if: env.CHROMATIC_PROJECT_TOKEN == ''
+        run: echo "::warning::CHROMATIC_PROJECT_TOKEN is not set, so visual tests were skipped."
+
+      - uses: pnpm/action-setup@v4
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+
+      - uses: actions/setup-node@v4
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+
+      - uses: chromaui/action@latest
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: packages/ui
+          # Only re-snapshot stories affected by the change.
+          onlyChanged: true
+          # Visual changes await review in Chromatic instead of failing the job.
+          exitZeroOnChanges: true
+          # Whatever lands on main becomes the new baseline.
+          autoAcceptChanges: main

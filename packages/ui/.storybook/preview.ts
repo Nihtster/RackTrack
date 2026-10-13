@@ -21,6 +21,9 @@ const preview: Preview = {
       },
     },
     controls: { matchers: { color: /(background|color)$/i } },
+    // Axe runs on every story; a violation fails the test run (and shows in the
+    // Accessibility panel). Use `a11y: { test: 'todo' }` to downgrade one story.
+    a11y: { test: 'error' },
   },
   initialGlobals: { backgrounds: { value: 'app' } },
 }

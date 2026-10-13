@@ -9,6 +9,11 @@
   --color-accent: #2388ff;
   --color-accent-bright: #55aaff;
 
+  /* Filled accent surfaces that carry light text. --color-accent itself is too
+     light for that (2.98:1); these meet WCAG AA (4.5:1) with --color-ink. */
+  --color-accent-solid: #1c66d6;
+  --color-accent-solid-hover: #1a58bd;
+
   /* text */
   --color-ink: #e8eef5; /* primary text */
   --color-ink-muted: #8997a8; /* secondary text */
@@ -17,6 +22,8 @@
   --color-success: #35c98a;
   --color-warning: #f5b83d;
   --color-critical: #ef5b67;
+  /* Critical text on its own tint (badges): --color-critical is 4.5:1 there at best. */
+  --color-critical-soft: #f4737d;
 
   /* shape */
   --radius-control: 0.375rem; /* buttons, inputs, selects */
