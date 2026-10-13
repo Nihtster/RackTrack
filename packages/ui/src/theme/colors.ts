@@ -9,6 +9,9 @@ export const colors = {
 
   accent: '#2388FF',
   accentBright: '#55AAFF',
+  // Filled surfaces that carry light text (accent itself is 2.98:1 with ink).
+  accentSolid: '#1C66D6',
+  accentSolidHover: '#1A58BD',
 
   ink: '#E8EEF5',
   inkMuted: '#8997A8',
@@ -16,4 +19,6 @@ export const colors = {
   success: '#35C98A',
   warning: '#F5B83D',
   critical: '#EF5B67',
+  // Critical text on its own tint, for badges.
+  criticalSoft: '#F4737D',
 } as const;

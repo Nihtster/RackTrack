@@ -24,7 +24,7 @@ import {
   controlSize,
 } from '../theme/control';
 import { motionDuration, motionPop } from '../theme/motion';
-import { useFieldControl } from './fieldContext';
+import { useFieldControl, useFieldLabelId } from './fieldContext';
 
 // Internal: the field-styled button + popover that DatePicker and
 // DateRangePicker share. The picker supplies what to show and the calendar.
@@ -87,6 +87,18 @@ export function DateFieldShell({
     invalid,
   });
 
+  // The button's visible text is the chosen date (or the placeholder), so the
+  // accessible name has to include it: a bare aria-label would hide the value
+  // from screen readers. In a Field, name it by the field's label plus itself.
+  const labelId = useFieldLabelId();
+  const shown = display ?? placeholder;
+  const nameProps =
+    labelId && control.id
+      ? { 'aria-labelledby': `${labelId} ${control.id}` }
+      : rest['aria-label']
+        ? { 'aria-label': `${rest['aria-label']}: ${shown}` }
+        : {};
+
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
@@ -112,7 +124,7 @@ export function DateFieldShell({
         ref={triggerRef}
         type="button"
         disabled={disabled}
-        aria-label={rest['aria-label']}
+        {...nameProps}
         aria-haspopup="dialog"
         aria-expanded={open}
         {...control}

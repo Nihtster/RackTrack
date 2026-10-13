@@ -29,14 +29,15 @@ export const Disabled: Story = { args: { page: 3, disabled: true } }
 export const Sizes: Story = {
   parameters: { docs: { source: { code: `const [page, setPage] = useState(1)
 
-<Pagination page={page} pageCount={20} onPageChange={setPage} size="sm" />
-<Pagination page={page} pageCount={20} onPageChange={setPage} size="md" />
-<Pagination page={page} pageCount={20} onPageChange={setPage} size="lg" />
+// Several on one page need distinct names, so screen readers can tell them apart.
+<Pagination page={page} pageCount={20} onPageChange={setPage} size="sm" aria-label="Pagination, sm" />
+<Pagination page={page} pageCount={20} onPageChange={setPage} size="md" aria-label="Pagination, md" />
+<Pagination page={page} pageCount={20} onPageChange={setPage} size="lg" aria-label="Pagination, lg" />
 ` } } },
   render: (args) => (
     <div className="space-y-4">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <Controlled key={size} {...args} size={size} />
+        <Controlled key={size} {...args} size={size} aria-label={`Pagination, ${size}`} />
       ))}
     </div>
   ),

@@ -251,7 +251,7 @@ export function CalendarGrid({
                       // read as unavailable and not just faded.
                       'disabled:cursor-not-allowed disabled:text-ink-muted disabled:line-through disabled:opacity-35 disabled:hover:bg-transparent',
                       state.selected
-                        ? 'bg-accent font-semibold text-ink hover:bg-accent-bright'
+                        ? 'bg-accent-solid font-semibold text-ink hover:bg-accent-solid-hover'
                         : 'hover:bg-surface',
                       !state.selected && iso === todayISO && 'ring-1 ring-accent ring-inset',
                     )}

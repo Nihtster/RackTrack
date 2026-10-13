@@ -28,13 +28,14 @@ export function Field({ label, hint, error, required, id, className, children }:
     <FieldContext.Provider
       value={{
         id: controlId,
+        labelId: `${controlId}-label`,
         describedBy: message === 'error' ? errorId : message === 'hint' ? hintId : undefined,
         invalid: !!error,
         required: !!required,
       }}
     >
       <div className={cn('flex flex-col gap-1.5', className)}>
-        <label htmlFor={controlId} className="text-sm font-medium text-ink">
+        <label id={`${controlId}-label`} htmlFor={controlId} className="text-sm font-medium text-ink">
           {label}
           {required && (
             <span className="ml-0.5 text-critical" aria-hidden="true">
