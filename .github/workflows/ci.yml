@@ -27,4 +27,6 @@ jobs:
 
       - run: pnpm --filter @racktrack/ui build-storybook
 
+      - run: pnpm --filter @racktrack/web test
+
       - run: pnpm --filter @racktrack/web build

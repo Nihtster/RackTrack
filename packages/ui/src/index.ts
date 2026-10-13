@@ -130,6 +130,7 @@ export {
   CircleCheck,
   CircleX,
   Crosshair,
+  History,
   Info,
   LayoutDashboard,
   MenuIcon,

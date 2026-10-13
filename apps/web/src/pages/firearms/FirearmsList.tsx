@@ -1,5 +1,5 @@
 import { PageHeader } from '@racktrack/ui';
-import { demoFirearms } from '../../data/demoFirearms';
+import { demoFirearms } from '../../data/demo';
 
 export function FirearmsList() {
   return (

@@ -36,6 +36,8 @@ export {
   CircleX,
   Info,
   TriangleAlert,
+  // activity
+  History,
   // fields
   Calendar,
 } from 'lucide-react';
