@@ -1,15 +1,18 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  CalendarIcon,
+  Button,
   Card,
   EmptyState,
   Icon,
+  Package,
   PageHeader,
   Plus,
   Skeleton,
-  SplitButton,
+  Tooltip,
+  Wrench,
 } from '@racktrack/ui';
+import type { IconComponent } from '@racktrack/ui';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { toDay } from '../../lib/day';
 import { AmmoInventoryCard } from './components/AmmoInventoryCard';
@@ -34,21 +37,31 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 });
 
-function LogRoundsButton() {
+// The three quick actions as icon buttons. Each has an accessible name, and a
+// tooltip says it on hover.
+function QuickActions() {
   const navigate = useNavigate();
+  const actions: { label: string; icon: IconComponent; run: () => void; primary?: boolean }[] = [
+    { label: 'Log rounds', icon: Plus, run: () => navigate('/rounds/new'), primary: true },
+    { label: 'Add maintenance', icon: Wrench, run: () => navigate('/maintenance') },
+    { label: 'Add ammo', icon: Package, run: () => navigate('/ammo') },
+  ];
+
   return (
-    <SplitButton
-      onClick={() => navigate('/rounds/new')}
-      leadingIcon={<Icon icon={Plus} />}
-      menuLabel="More ways to add"
-      options={[
-        { label: 'Log rounds', onSelect: () => navigate('/rounds/new') },
-        { label: 'Add maintenance', onSelect: () => navigate('/maintenance') },
-        { label: 'Add ammo', onSelect: () => navigate('/ammo') },
-      ]}
-    >
-      Log Rounds
-    </SplitButton>
+    <>
+      {actions.map(({ label, icon, run, primary }) => (
+        <Tooltip key={label} content={label}>
+          <Button
+            iconOnly
+            variant={primary ? 'primary' : 'secondary'}
+            aria-label={label}
+            onClick={run}
+          >
+            <Icon icon={icon} />
+          </Button>
+        </Tooltip>
+      ))}
+    </>
   );
 }
 
@@ -95,14 +108,22 @@ export function Dashboard() {
     <>
       <PageHeader
         title="Dashboard"
-        subtitle="Your firearms, ammo, and maintenance, all in one place."
+        subtitle={
+          <>
+            {/* On a phone the date sits under the title; from `sm` it moves
+                beside the action buttons. */}
+            <time dateTime={today} className="block sm:hidden">
+              {dateFormat.format(now)}
+            </time>
+            Your firearms, ammo, and maintenance, all in one place.
+          </>
+        }
         actions={
           <>
-            <time dateTime={today} className="flex items-center gap-2 text-sm text-ink-muted">
+            <time dateTime={today} className="mr-2 hidden text-sm text-ink-muted sm:block">
               {dateFormat.format(now)}
-              <Icon icon={CalendarIcon} className="text-accent" />
             </time>
-            <LogRoundsButton />
+            <QuickActions />
           </>
         }
       />

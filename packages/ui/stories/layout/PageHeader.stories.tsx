@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Button } from '../../src/core/Button'
-import { SplitButton } from '../../src/core/SplitButton'
+import { Tooltip } from '../../src/core/Tooltip'
+import { Icon, Package, Plus, Wrench } from '../../src/icons'
 import { PageHeader } from '../../src/layout/PageHeader'
 
 const meta = {
@@ -19,14 +20,24 @@ export const WithSubtitle: Story = {
   args: { subtitle: 'Everything in your safe, in one place.' },
 }
 
-// Controls sit on the right and drop under the title when there is no room.
+// Compact controls stay at the right at every width; the title's text wraps
+// instead. Icon buttons need an aria-label, and a Tooltip says it on hover.
 export const WithActions: Story = {
   args: {
     subtitle: 'Your firearms, ammo, and maintenance, all in one place.',
     actions: (
       <>
-        <span className="text-sm text-ink-muted">Tuesday, October 13, 2026</span>
-        <SplitButton options={[{ label: 'Add ammo', onSelect: () => {} }]}>Log Rounds</SplitButton>
+        {[
+          { icon: Plus, label: 'Log rounds', variant: 'primary' as const },
+          { icon: Wrench, label: 'Add maintenance', variant: 'secondary' as const },
+          { icon: Package, label: 'Add ammo', variant: 'secondary' as const },
+        ].map(({ icon, label, variant }) => (
+          <Tooltip key={label} content={label}>
+            <Button iconOnly variant={variant} aria-label={label}>
+              <Icon icon={icon} />
+            </Button>
+          </Tooltip>
+        ))}
       </>
     ),
   },
@@ -34,6 +45,16 @@ export const WithActions: Story = {
 
 export const WithSingleAction: Story = {
   args: { actions: <Button>Add firearm</Button> },
+}
+
+export const RichSubtitle: Story = {
+  args: {
+    subtitle: (
+      <>
+        <time dateTime="2026-10-13">Tue, Oct 13, 2026</time> · Your firearms, ammo, and maintenance.
+      </>
+    ),
+  },
 }
 
 export const CustomClassName: Story = {
