@@ -5,32 +5,35 @@ const number = new Intl.NumberFormat('en-US');
 
 export function StatsRow({ stats }: { stats: DashboardStats }) {
   return (
-    <section aria-label="Summary" className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 xl:grid-cols-4">
+    <section aria-label="Summary" className="grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 xl:grid-cols-4">
       <StatTile
-        label="Firearms registered"
+        label="Firearms"
         value={stats.firearms}
+        delta="Registered"
         icon={<Icon icon={Crosshair} size="md" />}
+        iconTone="accent"
       />
       <StatTile
-        label="Total rounds"
+        label="Total Rounds"
         value={number.format(stats.totalRounds)}
-        delta={`+${number.format(stats.roundsLast30)} last 30 days`}
-        deltaIntent="success"
+        delta="Logged"
         icon={<Icon icon={Target} size="md" />}
+        iconTone="success"
       />
       <StatTile
-        label="Maintenance due"
+        label="Maintenance"
         value={stats.maintenanceDue}
-        delta={stats.maintenanceOverdue > 0 ? `${stats.maintenanceOverdue} overdue` : 'All on schedule'}
-        deltaIntent={stats.maintenanceOverdue > 0 ? 'critical' : 'success'}
+        delta={stats.maintenanceOverdue > 0 ? `${stats.maintenanceOverdue} Overdue` : 'Due Soon'}
+        deltaIntent={stats.maintenanceOverdue > 0 ? 'critical' : 'warning'}
         icon={<Icon icon={Wrench} size="md" />}
+        iconTone="warning"
       />
       <StatTile
-        label="Ammo types in inventory"
+        label="Ammo Types"
         value={stats.ammoTypes}
-        delta={stats.ammoLow > 0 ? `${stats.ammoLow} running low` : 'Stocked'}
-        deltaIntent={stats.ammoLow > 0 ? 'warning' : 'success'}
+        delta="In Inventory"
         icon={<Icon icon={Package} size="md" />}
+        iconTone="violet"
       />
     </section>
   );

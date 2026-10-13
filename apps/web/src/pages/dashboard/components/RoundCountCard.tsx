@@ -5,24 +5,22 @@ import { ViewAllLink } from './ViewAllLink';
 const number = new Intl.NumberFormat('en-US');
 
 export function RoundCountCard({ days }: { days: DayRounds[] }) {
-  const total = days.reduce((n, d) => n + d.rounds, 0);
-
   return (
-    <Card className="flex flex-col">
+    <Card className="flex h-full flex-col">
       <CardHeader
-        title="Round count"
+        title={
+          <>
+            Round Count <span className="font-normal text-ink-muted">(Last 30 Days)</span>
+          </>
+        }
         actions={<ViewAllLink to="/rounds">View Details →</ViewAllLink>}
       />
       <CardBody className="flex-1">
-        <p className="mb-3 text-sm text-ink-muted">
-          <span className="text-lg font-semibold text-ink">{number.format(total)}</span> rounds in the
-          last 30 days
-        </p>
         <BarChart
           aria-label="Rounds fired per day, last 30 days"
           data={days}
           xKey="label"
-          series={[{ key: 'rounds', label: 'Rounds', color: 'accent' }]}
+          series={[{ key: 'rounds', label: 'Rounds', color: 'success' }]}
           valueFormatter={(v) => number.format(v)}
           height={220}
         />

@@ -129,7 +129,7 @@ describe('ammoLevels', () => {
   it('puts the emptiest stock first and picks an intent per level', () => {
     const levels = ammoLevels(data.ammo);
     expect(levels.map((l) => l.stock.id)).toEqual(['d', 'a', 'b', 'c']);
-    expect(levels.map((l) => l.intent)).toEqual(['critical', 'critical', 'warning', 'accent']);
+    expect(levels.map((l) => l.intent)).toEqual(['critical', 'critical', 'success', 'success']);
     expect(levels[1].percent).toBe(10);
   });
 
@@ -144,8 +144,15 @@ describe('deriveActivity', () => {
     const items = deriveActivity(data, 20);
     expect(items[0].date >= items[1].date).toBe(true);
     expect(new Set(items.map((i) => i.kind))).toEqual(new Set(['rounds', 'maintenance', 'firearm']));
-    expect(items.find((i) => i.id === 'firearm-3')?.title).toBe('Sig registered');
-    expect(items.find((i) => i.id === 'session-s1')?.title).toBe('50 rounds logged');
+    expect(items.find((i) => i.id === 'firearm-3')).toMatchObject({
+      title: 'Registered new firearm',
+      subtitle: 'Sep 20, 2026 · Sig',
+    });
+    expect(items.find((i) => i.id === 'session-s1')).toMatchObject({
+      title: 'Added 50 rounds of 9mm',
+      subtitle: 'Oct 13, 2026 · Glock',
+    });
+    expect(items.find((i) => i.id === 'maintenance-m6')?.title).toBe('Completed maintenance');
   });
 
   it('leaves out jobs that are not done yet', () => {

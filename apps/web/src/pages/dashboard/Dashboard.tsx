@@ -1,6 +1,15 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, EmptyState, PageHeader, Skeleton, SplitButton } from '@racktrack/ui';
+import {
+  CalendarIcon,
+  Card,
+  EmptyState,
+  Icon,
+  PageHeader,
+  Plus,
+  Skeleton,
+  SplitButton,
+} from '@racktrack/ui';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { toDay } from '../../lib/day';
 import { AmmoInventoryCard } from './components/AmmoInventoryCard';
@@ -19,8 +28,8 @@ import {
 } from './derive';
 
 const dateFormat = new Intl.DateTimeFormat('en-US', {
-  weekday: 'long',
-  month: 'long',
+  weekday: 'short',
+  month: 'short',
   day: 'numeric',
   year: 'numeric',
 });
@@ -30,6 +39,7 @@ function LogRoundsButton() {
   return (
     <SplitButton
       onClick={() => navigate('/rounds/new')}
+      leadingIcon={<Icon icon={Plus} />}
       menuLabel="More ways to add"
       options={[
         { label: 'Log rounds', onSelect: () => navigate('/rounds/new') },
@@ -74,10 +84,10 @@ export function Dashboard() {
     return {
       stats: deriveStats(data, today),
       days: roundsPerDay(data.sessions, today, 30),
-      upcoming: upcomingMaintenance(data, today, 5),
-      firearms: recentFirearms(data, 4),
+      upcoming: upcomingMaintenance(data, today),
+      firearms: recentFirearms(data),
       levels: ammoLevels(data.ammo),
-      activity: deriveActivity(data, 6),
+      activity: deriveActivity(data),
     };
   }, [data, today]);
 
@@ -88,8 +98,9 @@ export function Dashboard() {
         subtitle="Your firearms, ammo, and maintenance, all in one place."
         actions={
           <>
-            <time dateTime={today} className="text-sm text-ink-muted">
+            <time dateTime={today} className="flex items-center gap-2 text-sm text-ink-muted">
               {dateFormat.format(now)}
+              <Icon icon={CalendarIcon} className="text-accent" />
             </time>
             <LogRoundsButton />
           </>
@@ -111,19 +122,19 @@ export function Dashboard() {
         <div className="space-y-4">
           <StatsRow stats={view.stats} />
 
+          <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[3fr_2fr_2fr]">
+            <div className="lg:col-span-2 xl:col-span-1">
+              <RecentFirearmsCard firearms={view.firearms} />
+            </div>
+            <UpcomingMaintenanceCard tasks={view.upcoming} />
+            <AmmoInventoryCard levels={view.levels} />
+          </div>
+
           <div className="grid gap-4 xl:grid-cols-3">
             <div className="xl:col-span-2">
               <RoundCountCard days={view.days} />
             </div>
-            <UpcomingMaintenanceCard tasks={view.upcoming} />
-          </div>
-
-          <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-            <RecentFirearmsCard firearms={view.firearms} />
-            <AmmoInventoryCard levels={view.levels} />
-            <div className="lg:col-span-2 xl:col-span-1">
-              <RecentActivityCard items={view.activity} today={today} />
-            </div>
+            <RecentActivityCard items={view.activity} />
           </div>
         </div>
       )}

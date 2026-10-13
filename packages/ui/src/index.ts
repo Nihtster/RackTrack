@@ -15,6 +15,8 @@ export type { TooltipProps } from './core/Tooltip'
 // layout
 export { Card, CardBody, CardFooter, CardHeader } from './layout/Card'
 export type { CardHeaderProps, CardProps, CardSize } from './layout/Card'
+export { List, ListItem } from './layout/List'
+export type { ListItemLinkProps, ListItemProps, ListProps } from './layout/List'
 export { IconTile } from './layout/IconTile'
 export type { IconTileProps, IconTileSize, IconTileTone } from './layout/IconTile'
 export { StatTile } from './layout/StatTile'

@@ -34,6 +34,13 @@ export function formatShort(day: string): string {
   return shortFormat.format(parseDay(day));
 }
 
+const longFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+/** "Sep 25, 2025" */
+export function formatLong(day: string): string {
+  return longFormat.format(parseDay(day));
+}
+
 /** "Today", "Yesterday", "3 days ago", or "Sep 14" once it is over two weeks. */
 export function formatRelative(day: string, today: string): string {
   const ago = diffDays(day, today);

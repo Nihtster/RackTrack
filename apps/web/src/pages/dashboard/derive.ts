@@ -1,9 +1,9 @@
 import type { BadgeIntent } from '@racktrack/ui';
 import type { AmmoStock } from '../../types/ammo';
-import type { Firearm } from '../../types/firearm';
+import type { Firearm, FirearmType } from '../../types/firearm';
 import type { MaintenanceTask } from '../../types/maintenance';
 import type { RoundSession } from '../../types/session';
-import { addDays, diffDays, formatShort } from '../../lib/day';
+import { addDays, diffDays, formatLong, formatShort } from '../../lib/day';
 
 // Everything the dashboard shows is derived here from the raw records, as plain
 // functions of (data, today). They hold no state and read no clock, so they are
@@ -20,8 +20,14 @@ export interface DashboardData {
 export const DUE_SOON_DAYS = 14;
 /** Stock at or below this share of its target is flagged as low. */
 export const LOW_AMMO_SHARE = 0.25;
-/** Stock at or below this share of its target is a warning. */
-export const WATCH_AMMO_SHARE = 0.5;
+
+export const firearmTypeLabel: Record<FirearmType, string> = {
+  pistol: 'Pistol',
+  rifle: 'Rifle',
+  smg: 'SMG',
+  shotgun: 'Shotgun',
+  sniper: 'Sniper',
+};
 
 export type MaintenanceStatus = 'overdue' | 'due-soon' | 'scheduled';
 
@@ -102,7 +108,7 @@ export interface UpcomingTask {
 }
 
 /** Open jobs, soonest first (overdue ones lead). */
-export function upcomingMaintenance(data: DashboardData, today: string, limit = 5): UpcomingTask[] {
+export function upcomingMaintenance(data: DashboardData, today: string, limit = 3): UpcomingTask[] {
   const byId = new Map(data.firearms.map((f) => [f.id, f]));
   return openTasks(data.maintenance)
     .map((t) => ({
@@ -133,7 +139,7 @@ export interface RecentFirearm {
 }
 
 /** Most recently added firearms first. */
-export function recentFirearms(data: DashboardData, limit = 4): RecentFirearm[] {
+export function recentFirearms(data: DashboardData, limit = 5): RecentFirearm[] {
   return [...data.firearms]
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     .slice(0, limit)
@@ -160,13 +166,12 @@ export interface AmmoLevel {
   intent: BadgeIntent;
 }
 
-/** Fullest-relative-to-target last, so what needs restocking is at the top. */
+/** Emptiest relative to target first, so what needs restocking is at the top. */
 export function ammoLevels(ammo: AmmoStock[]): AmmoLevel[] {
   return ammo
     .map((stock) => {
       const share = stock.target > 0 ? stock.onHand / stock.target : 0;
-      const intent: BadgeIntent =
-        share <= LOW_AMMO_SHARE ? 'critical' : share <= WATCH_AMMO_SHARE ? 'warning' : 'accent';
+      const intent: BadgeIntent = share <= LOW_AMMO_SHARE ? 'critical' : 'success';
       return { stock, percent: Math.round(Math.min(share, 1) * 100), intent, share };
     })
     .sort((a, b) => a.share - b.share)
@@ -188,7 +193,7 @@ export interface ActivityItem {
 const number = new Intl.NumberFormat('en-US');
 
 /** Rounds logged, jobs completed and firearms added, newest first. */
-export function deriveActivity(data: DashboardData, limit = 6): ActivityItem[] {
+export function deriveActivity(data: DashboardData, limit = 4): ActivityItem[] {
   const byId = new Map(data.firearms.map((f) => [f.id, f]));
   const nameOf = (id: string) => byId.get(id)?.name ?? 'Unknown firearm';
 
@@ -196,8 +201,8 @@ export function deriveActivity(data: DashboardData, limit = 6): ActivityItem[] {
     ...data.sessions.map<ActivityItem>((s) => ({
       id: `session-${s.id}`,
       kind: 'rounds',
-      title: `${number.format(s.rounds)} rounds logged`,
-      subtitle: `${nameOf(s.firearmId)} · ${s.location}`,
+      title: `Added ${number.format(s.rounds)} rounds of ${byId.get(s.firearmId)?.caliber ?? 'ammo'}`,
+      subtitle: `${formatLong(s.date)} · ${nameOf(s.firearmId)}`,
       date: s.date,
       href: '/rounds',
     })),
@@ -206,16 +211,16 @@ export function deriveActivity(data: DashboardData, limit = 6): ActivityItem[] {
       .map<ActivityItem>((t) => ({
         id: `maintenance-${t.id}`,
         kind: 'maintenance',
-        title: `${t.task} completed`,
-        subtitle: nameOf(t.firearmId),
+        title: 'Completed maintenance',
+        subtitle: `${formatLong(t.completedAt as string)} · ${nameOf(t.firearmId)}`,
         date: t.completedAt as string,
         href: '/maintenance/history',
       })),
     ...data.firearms.map<ActivityItem>((f) => ({
       id: `firearm-${f.id}`,
       kind: 'firearm',
-      title: `${f.name} registered`,
-      subtitle: f.caliber,
+      title: 'Registered new firearm',
+      subtitle: `${formatLong(f.createdAt)} · ${f.name}`,
       date: f.createdAt,
       href: '/firearms',
     })),

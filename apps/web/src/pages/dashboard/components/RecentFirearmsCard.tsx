@@ -1,23 +1,34 @@
 import { Link } from 'react-router-dom';
 import {
   Card,
-  CardBody,
   CardHeader,
-  ChevronRight,
   Crosshair,
   EmptyState,
   Icon,
+  IconTile,
+  List,
+  ListItem,
 } from '@racktrack/ui';
-import { formatShort } from '../../../lib/day';
-import type { RecentFirearm } from '../derive';
+import { formatLong } from '../../../lib/day';
+import { firearmTypeLabel, type RecentFirearm } from '../derive';
 import { ViewAllLink } from './ViewAllLink';
 
 const number = new Intl.NumberFormat('en-US');
 
+// A label over a value, for the figures at the right of a row.
+function Figure({ label, children }: { label: string; children: string }) {
+  return (
+    <div>
+      <dt className="text-ink-muted">{label}</dt>
+      <dd className="font-semibold text-ink tabular-nums">{children}</dd>
+    </div>
+  );
+}
+
 export function RecentFirearmsCard({ firearms }: { firearms: RecentFirearm[] }) {
   return (
-    <Card className="flex flex-col">
-      <CardHeader title="Recent firearms" actions={<ViewAllLink to="/firearms" />} />
+    <Card className="flex h-full flex-col">
+      <CardHeader title="Recent Firearms" actions={<ViewAllLink to="/firearms" />} />
       {firearms.length === 0 ? (
         <EmptyState
           icon={<Icon icon={Crosshair} size="md" />}
@@ -25,27 +36,34 @@ export function RecentFirearmsCard({ firearms }: { firearms: RecentFirearm[] }) 
           description="Add your first firearm to start tracking it."
         />
       ) : (
-        <CardBody className="p-0">
-          <ul className="divide-y divide-border">
-            {firearms.map(({ firearm, roundsFired, lastMaintenance }) => (
-              <li key={firearm.id}>
-                <Link
-                  to="/firearms"
-                  className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-raised focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-bright"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-medium text-ink">{firearm.name}</div>
-                    <div className="truncate text-xs text-ink-muted">
-                      {firearm.caliber} · {number.format(roundsFired)} rounds ·{' '}
-                      {lastMaintenance ? `Serviced ${formatShort(lastMaintenance)}` : 'Not yet serviced'}
-                    </div>
-                  </div>
-                  <Icon icon={ChevronRight} className="text-ink-muted" />
+        <List>
+          {firearms.map(({ firearm, roundsFired, lastMaintenance }) => (
+            <ListItem
+              key={firearm.id}
+              leading={
+                <IconTile tone="neutral">
+                  <Icon icon={Crosshair} />
+                </IconTile>
+              }
+              title={firearm.name}
+              description={`${firearmTypeLabel[firearm.type]} · ${firearm.caliber}`}
+              // Hidden on narrow screens, where the name and type fill the row.
+              trailing={
+                <dl className="hidden shrink-0 gap-6 text-xs min-[520px]:flex">
+                  <Figure label="Last Maintenance">
+                    {lastMaintenance ? formatLong(lastMaintenance) : 'Never'}
+                  </Figure>
+                  <Figure label="Rounds Fired">{number.format(roundsFired)}</Figure>
+                </dl>
+              }
+              renderLink={({ className, children }) => (
+                <Link to="/firearms" className={className}>
+                  {children}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </CardBody>
+              )}
+            />
+          ))}
+        </List>
       )}
     </Card>
   );
