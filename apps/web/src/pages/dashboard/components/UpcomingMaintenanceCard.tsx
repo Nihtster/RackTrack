@@ -11,7 +11,8 @@ import {
   Wrench,
 } from '@racktrack/ui';
 import { formatLong } from '../../../lib/day';
-import { statusBadge, type UpcomingTask } from '../derive';
+import type { UpcomingTask } from '../../../types';
+import { statusBadge } from '../derive';
 import { ViewAllLink } from './ViewAllLink';
 
 export function UpcomingMaintenanceCard({ tasks }: { tasks: UpcomingTask[] }) {

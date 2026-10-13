@@ -1,5 +1,5 @@
 import { Crosshair, Icon, Package, StatTile, Target, Wrench } from '@racktrack/ui';
-import type { DashboardStats } from '../derive';
+import type { DashboardStats } from '../../../types';
 
 const number = new Intl.NumberFormat('en-US');
 

@@ -1,5 +1,5 @@
 import { BarChart, Card, CardBody, CardHeader } from '@racktrack/ui';
-import type { DayRounds } from '../derive';
+import type { DayRounds } from '../../../types';
 import { ViewAllLink } from './ViewAllLink';
 
 const number = new Intl.NumberFormat('en-US');

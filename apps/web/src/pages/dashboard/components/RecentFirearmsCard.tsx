@@ -10,7 +10,8 @@ import {
   ListItem,
 } from '@racktrack/ui';
 import { formatLong } from '../../../lib/day';
-import { firearmTypeLabel, type RecentFirearm } from '../derive';
+import type { RecentFirearm } from '../../../types';
+import { firearmTypeLabel } from '../derive';
 import { ViewAllLink } from './ViewAllLink';
 
 const number = new Intl.NumberFormat('en-US');

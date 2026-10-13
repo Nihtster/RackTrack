@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { api } from '../data/api';
-import type { DashboardData } from '../pages/dashboard/derive';
+import type { DashboardData } from '../types';
 import { useQuery } from './useQuery';
 
 /** Everything the dashboard reads, loaded together. */

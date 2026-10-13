@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Firearm } from '../../types/firearm';
+import type { DashboardData, Firearm } from '../../types';
 import {
   ammoLevels,
   deriveActivity,
@@ -8,7 +8,6 @@ import {
   recentFirearms,
   roundsPerDay,
   upcomingMaintenance,
-  type DashboardData,
 } from './derive';
 
 const today = '2026-10-13';
@@ -34,10 +33,10 @@ const data: DashboardData = {
     { id: 'd', caliber: '12ga', onHand: 0, target: 500 }, // none on hand
   ],
   sessions: [
-    { id: 's1', date: '2026-10-13', firearmId: '1', rounds: 50, location: 'Indoor' },
-    { id: 's2', date: '2026-10-13', firearmId: '2', rounds: 30, location: 'Outdoor' },
-    { id: 's3', date: '2026-09-14', firearmId: '1', rounds: 100, location: 'Indoor' }, // day 30 of the window
-    { id: 's4', date: '2026-09-13', firearmId: '1', rounds: 200, location: 'Indoor' }, // just outside it
+    { id: 's1', date: '2026-10-13', firearmId: '1', rounds: 50, location: 'Indoor', loads: [{ rounds: 50 }] },
+    { id: 's2', date: '2026-10-13', firearmId: '2', rounds: 30, location: 'Outdoor', loads: [{ rounds: 30 }] },
+    { id: 's3', date: '2026-09-14', firearmId: '1', rounds: 100, location: 'Indoor', loads: [{ rounds: 100 }] }, // day 30 of the window
+    { id: 's4', date: '2026-09-13', firearmId: '1', rounds: 200, location: 'Indoor', loads: [{ rounds: 200 }] }, // just outside it
   ],
   maintenance: [
     { id: 'm1', firearmId: '1', task: 'Clean', dueDate: '2026-10-10' }, // overdue
@@ -153,6 +152,31 @@ describe('deriveActivity', () => {
       subtitle: 'Oct 13, 2026 · Glock',
     });
     expect(items.find((i) => i.id === 'maintenance-m6')?.title).toBe('Completed maintenance');
+  });
+
+  it('names every caliber a mixed session used', () => {
+    const mixed: DashboardData = {
+      ...data,
+      ammo: [
+        { id: 'x', caliber: '5.56', onHand: 100, target: 100 },
+        { id: 'y', caliber: '.223', onHand: 100, target: 100 },
+      ],
+      sessions: [
+        {
+          id: 'mix',
+          date: '2026-10-13',
+          firearmId: '1',
+          rounds: 90,
+          location: 'Outdoor',
+          loads: [
+            { ammoId: 'x', rounds: 60 },
+            { ammoId: 'y', rounds: 30 },
+          ],
+        },
+      ],
+    };
+    const item = deriveActivity(mixed, 20).find((i) => i.id === 'session-mix');
+    expect(item?.title).toBe('Added 90 rounds of 5.56 + .223');
   });
 
   it('leaves out jobs that are not done yet', () => {

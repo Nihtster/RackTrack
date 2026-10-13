@@ -1,7 +1,4 @@
-import type { AmmoStock } from '../../types/ammo';
-import type { Firearm } from '../../types/firearm';
-import type { MaintenanceTask } from '../../types/maintenance';
-import type { RoundSession } from '../../types/session';
+import type { AmmoStock, Firearm, MaintenanceTask, RoundSession } from '../../types';
 import { addDays, toDay } from '../../lib/day';
 
 // Demo data: stands in for the API until the backend is built. Dates are
@@ -15,7 +12,14 @@ export const demoFirearms: Firearm[] = [
   { id: '1', name: 'Glock 19 Gen5', caliber: '9mm', type: 'pistol', createdAt: ago(210) },
   { id: '2', name: 'Ruger 10/22', caliber: '.22 LR', type: 'rifle', createdAt: ago(160) },
   { id: '3', name: 'Remington 870', caliber: '12 Gauge', type: 'shotgun', createdAt: ago(95) },
-  { id: '4', name: 'Ruger AR-556', caliber: '5.56x45mm', type: 'rifle', createdAt: ago(60) },
+  {
+    id: '4',
+    name: 'Ruger AR-556',
+    caliber: '5.56x45mm',
+    alsoFires: ['.223 Rem'],
+    type: 'rifle',
+    createdAt: ago(60),
+  },
   { id: '5', name: 'Sig Sauer P365', caliber: '9mm', type: 'pistol', createdAt: ago(21) },
   { id: '6', name: 'Savage 110', caliber: '.308 Win', type: 'sniper', createdAt: ago(6) },
 ];
@@ -26,6 +30,7 @@ export const demoAmmo: AmmoStock[] = [
   { id: 'a3', caliber: '5.56x45mm', onHand: 420, target: 1500 },
   { id: 'a4', caliber: '12 Gauge', onHand: 90, target: 500 },
   { id: 'a5', caliber: '.308 Win', onHand: 160, target: 400 },
+  { id: 'a6', caliber: '.223 Rem', onHand: 600, target: 1000 },
 ];
 
 // [days ago, firearm id, rounds, location]
@@ -61,6 +66,7 @@ export const demoSessions: RoundSession[] = sessionRows.map(([daysAgo, firearmId
   firearmId,
   rounds,
   location,
+  loads: [{ rounds }],
 }));
 
 export const demoMaintenance: MaintenanceTask[] = [

@@ -8,3 +8,6 @@ export interface MaintenanceTask {
   /** Calendar day the job was done, YYYY-MM-DD. */
   completedAt?: string;
 }
+
+/** Where an open job stands against its due date. */
+export type MaintenanceStatus = 'overdue' | 'due-soon' | 'scheduled';

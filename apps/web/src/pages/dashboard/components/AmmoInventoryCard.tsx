@@ -8,7 +8,7 @@ import {
   Package,
   ProgressBar,
 } from '@racktrack/ui';
-import type { AmmoLevel } from '../derive';
+import type { AmmoLevel } from '../../../types';
 import { ViewAllLink } from './ViewAllLink';
 
 const number = new Intl.NumberFormat('en-US');

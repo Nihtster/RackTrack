@@ -1,20 +1,23 @@
 import type { BadgeIntent } from '@racktrack/ui';
-import type { AmmoStock } from '../../types/ammo';
-import type { Firearm, FirearmType } from '../../types/firearm';
-import type { MaintenanceTask } from '../../types/maintenance';
-import type { RoundSession } from '../../types/session';
+import type {
+  ActivityItem,
+  AmmoLevel,
+  AmmoStock,
+  DashboardData,
+  DashboardStats,
+  DayRounds,
+  FirearmType,
+  MaintenanceStatus,
+  MaintenanceTask,
+  RecentFirearm,
+  RoundSession,
+  UpcomingTask,
+} from '../../types';
 import { addDays, diffDays, formatLong, formatShort } from '../../lib/day';
 
 // Everything the dashboard shows is derived here from the raw records, as plain
 // functions of (data, today). They hold no state and read no clock, so they are
 // the same code whether the records come from demo data or an API.
-
-export interface DashboardData {
-  firearms: Firearm[];
-  ammo: AmmoStock[];
-  sessions: RoundSession[];
-  maintenance: MaintenanceTask[];
-}
 
 /** Days ahead that still counts as "due soon". */
 export const DUE_SOON_DAYS = 14;
@@ -29,8 +32,6 @@ export const firearmTypeLabel: Record<FirearmType, string> = {
   sniper: 'Sniper',
 };
 
-export type MaintenanceStatus = 'overdue' | 'due-soon' | 'scheduled';
-
 export function maintenanceStatus(task: MaintenanceTask, today: string): MaintenanceStatus {
   const until = diffDays(today, task.dueDate);
   if (until < 0) return 'overdue';
@@ -40,19 +41,6 @@ export function maintenanceStatus(task: MaintenanceTask, today: string): Mainten
 const openTasks = (tasks: MaintenanceTask[]) => tasks.filter((t) => !t.completedAt);
 
 // ---- stat tiles -----------------------------------------------------------
-
-export interface DashboardStats {
-  firearms: number;
-  totalRounds: number;
-  /** Rounds in the 30 days up to and including today. */
-  roundsLast30: number;
-  /** Open jobs that are overdue or due soon. */
-  maintenanceDue: number;
-  maintenanceOverdue: number;
-  ammoTypes: number;
-  /** Calibers at or below the low-stock line. */
-  ammoLow: number;
-}
 
 export function deriveStats(data: DashboardData, today: string): DashboardStats {
   const windowStart = addDays(today, -29);
@@ -74,16 +62,6 @@ export function deriveStats(data: DashboardData, today: string): DashboardStats 
 
 // ---- round count chart ----------------------------------------------------
 
-// A type alias, not an interface: chart rows need an index signature, which
-// only object type aliases get implicitly.
-export type DayRounds = {
-  /** YYYY-MM-DD, kept for the tooltip and for linking. */
-  date: string;
-  /** Short axis label, "Sep 14". */
-  label: string;
-  rounds: number;
-};
-
 /** One entry per day for the `days` days ending today, zero when nothing was fired. */
 export function roundsPerDay(sessions: RoundSession[], today: string, days = 30): DayRounds[] {
   const totals = new Map<string, number>();
@@ -96,16 +74,6 @@ export function roundsPerDay(sessions: RoundSession[], today: string, days = 30)
 }
 
 // ---- upcoming maintenance -------------------------------------------------
-
-export interface UpcomingTask {
-  id: string;
-  firearm: string;
-  task: string;
-  dueDate: string;
-  status: MaintenanceStatus;
-  /** Negative when overdue. */
-  daysUntil: number;
-}
 
 /** Open jobs, soonest first (overdue ones lead). */
 export function upcomingMaintenance(data: DashboardData, today: string, limit = 3): UpcomingTask[] {
@@ -131,13 +99,6 @@ export const statusBadge: Record<MaintenanceStatus, { label: string; intent: Bad
 
 // ---- recent firearms ------------------------------------------------------
 
-export interface RecentFirearm {
-  firearm: Firearm;
-  roundsFired: number;
-  /** Day the last job on this firearm was completed, if any. */
-  lastMaintenance?: string;
-}
-
 /** Most recently added firearms first. */
 export function recentFirearms(data: DashboardData, limit = 5): RecentFirearm[] {
   return [...data.firearms]
@@ -160,12 +121,6 @@ export function recentFirearms(data: DashboardData, limit = 5): RecentFirearm[] 
 
 // ---- ammo inventory -------------------------------------------------------
 
-export interface AmmoLevel {
-  stock: AmmoStock;
-  percent: number;
-  intent: BadgeIntent;
-}
-
 /** Emptiest relative to target first, so what needs restocking is at the top. */
 export function ammoLevels(ammo: AmmoStock[]): AmmoLevel[] {
   return ammo
@@ -180,28 +135,26 @@ export function ammoLevels(ammo: AmmoStock[]): AmmoLevel[] {
 
 // ---- recent activity ------------------------------------------------------
 
-export interface ActivityItem {
-  id: string;
-  kind: 'rounds' | 'maintenance' | 'firearm';
-  title: string;
-  subtitle: string;
-  /** YYYY-MM-DD */
-  date: string;
-  href: string;
-}
-
 const number = new Intl.NumberFormat('en-US');
 
 /** Rounds logged, jobs completed and firearms added, newest first. */
 export function deriveActivity(data: DashboardData, limit = 4): ActivityItem[] {
   const byId = new Map(data.firearms.map((f) => [f.id, f]));
+  const ammoById = new Map(data.ammo.map((a) => [a.id, a]));
   const nameOf = (id: string) => byId.get(id)?.name ?? 'Unknown firearm';
+
+  // "9mm", or "5.56x45mm + .223 Rem" for a session that mixed ammo.
+  const calibersOf = (s: RoundSession) => {
+    const named = s.loads.map((l) => ammoById.get(l.ammoId ?? '')?.caliber).filter((c): c is string => !!c);
+    const unique = [...new Set(named)];
+    return unique.length > 0 ? unique.join(' + ') : (byId.get(s.firearmId)?.caliber ?? 'ammo');
+  };
 
   const items: ActivityItem[] = [
     ...data.sessions.map<ActivityItem>((s) => ({
       id: `session-${s.id}`,
       kind: 'rounds',
-      title: `Added ${number.format(s.rounds)} rounds of ${byId.get(s.firearmId)?.caliber ?? 'ammo'}`,
+      title: `Added ${number.format(s.rounds)} rounds of ${calibersOf(s)}`,
       subtitle: `${formatLong(s.date)} · ${nameOf(s.firearmId)}`,
       date: s.date,
       href: '/rounds',

@@ -13,7 +13,7 @@ import {
   Wrench,
 } from '@racktrack/ui';
 import type { IconComponent, IconTileTone } from '@racktrack/ui';
-import type { ActivityItem } from '../derive';
+import type { ActivityItem } from '../../../types';
 import { ViewAllLink } from './ViewAllLink';
 
 const kind: Record<ActivityItem['kind'], { icon: IconComponent; tone: IconTileTone }> = {
