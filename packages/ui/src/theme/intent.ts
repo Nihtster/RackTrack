@@ -18,3 +18,12 @@ export const intentText = {
   warning: 'text-warning',
   critical: 'text-critical',
 } as const satisfies Record<Intent, string>;
+
+// Solid fills, for bars and meters.
+export const intentFill = {
+  neutral: 'bg-ink-muted',
+  accent: 'bg-accent',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  critical: 'bg-critical',
+} as const satisfies Record<Intent, string>;

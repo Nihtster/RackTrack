@@ -51,6 +51,43 @@ export type { DateRangePickerProps } from './forms/DateRangePicker'
 export { SearchInput } from './forms/SearchInput'
 export type { SearchInputProps } from './forms/SearchInput'
 
+// data
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableEmpty,
+  TableFoot,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from './data/Table'
+export { Pagination } from './data/Pagination'
+export type { PaginationProps } from './data/Pagination'
+export { BarChart } from './data/BarChart'
+export type { BarChartProps, BarClickInfo } from './data/BarChart'
+export { LineChart } from './data/LineChart'
+export type { LineChartProps, PointClickInfo } from './data/LineChart'
+export { PieChart } from './data/PieChart'
+export type { PieChartProps, SliceClickInfo } from './data/PieChart'
+export { RadarChart } from './data/RadarChart'
+export type { RadarChartProps } from './data/RadarChart'
+export { ChartTooltip } from './data/ChartTooltip'
+export type { ChartTooltipProps } from './data/ChartTooltip'
+export type { ChartColor, ChartSeries } from './data/chartTheme'
+export { ProgressBar } from './data/ProgressBar'
+export type { ProgressBarProps, ProgressBarSize } from './data/ProgressBar'
+export type {
+  SortDirection,
+  TableCellProps,
+  TableEmptyProps,
+  TableHeaderProps,
+  TableProps,
+  TableRowProps,
+  TableSize,
+} from './data/Table'
+
 // feedback
 export { EmptyState } from './feedback/EmptyState'
 export type { EmptyStateProps } from './feedback/EmptyState'
