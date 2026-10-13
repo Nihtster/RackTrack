@@ -1,14 +1,16 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
-import { Dashboard } from './pages/dashboard/Dashboard';
-import { FirearmsList } from './pages/firearms/FirearmsList';
-import { FirearmForm } from './pages/firearms/FirearmForm';
-import { LogSession } from './pages/rounds/LogSession';
-import { RoundsHistory } from './pages/rounds/RoundsHistory';
-import { MaintenanceSchedule } from './pages/maintenance/MaintenanceSchedule';
-import { MaintenanceHistory } from './pages/maintenance/MaintenanceHistory';
-import { AmmoInventory } from './pages/ammo/AmmoInventory';
-import { AmmoTypes } from './pages/ammo/AmmoTypes';
+import {
+  AmmoInventory,
+  AmmoTypes,
+  Dashboard,
+  FirearmForm,
+  FirearmsList,
+  LogSession,
+  MaintenanceHistory,
+  MaintenanceSchedule,
+  RoundsHistory,
+} from './routes/pages';
 
 // The app lives under a path on GitHub Pages (see `base` in vite.config.ts), so
 // the router needs the same prefix, minus the trailing slash.
