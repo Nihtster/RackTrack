@@ -16,8 +16,10 @@ const lookup = icons as unknown as Record<string, IconComponent>
 
 // Image icons: URL plus aspect ratio (width / height). In the app these come from
 // its generated manifest; the stories use the same files, served from the app's
-// public folder (see staticDirs in .storybook/main.ts).
-const art = (path: string, aspectRatio: number) => ({ src: `/icons/${path}.svg`, aspectRatio })
+// public folder (see staticDirs in .storybook/main.ts). Relative on purpose: a
+// root-absolute `/icons/...` would miss when Storybook is hosted under a path
+// (GitHub Pages serves it at /RackTrack/storybook/).
+const art = (path: string, aspectRatio: number) => ({ src: `icons/${path}.svg`, aspectRatio })
 const firearms = {
   pistol: art('firearms/pistol', 1.442),
   rifle: art('firearms/rifle', 2.94),
