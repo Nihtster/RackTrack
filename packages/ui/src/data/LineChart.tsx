@@ -10,7 +10,14 @@ import {
   YAxis,
 } from 'recharts';
 import { cn } from '../utils/cn';
-import { axisTick, chartAnimates, gridStroke, seriesColor, type ChartSeries } from './chartTheme';
+import {
+  axisTick,
+  chartAnimates,
+  gridStroke,
+  seriesColor,
+  valueAxis,
+  type ChartSeries,
+} from './chartTheme';
 import { ActivePoint, type ChartRow as Row } from './ActivePoint';
 import { ChartTooltip } from './ChartTooltip';
 
@@ -56,6 +63,8 @@ export function LineChart({
   'aria-label': ariaLabel,
 }: LineChartProps) {
   const activeRow = useRef<Row | null>(null);
+  // Round tick values instead of Recharts' evenly spaced ones (0, 65, 130...).
+  const axis = valueAxis(data, series.map((s) => s.key), false);
 
   // Keyboard: the row the tooltip is on. (Mouse reads the index off the click
   // event itself, which is never stale.)
@@ -96,6 +105,7 @@ export function LineChart({
             minTickGap={16}
           />
           <YAxis
+            {...axis}
             tick={axisTick}
             tickLine={false}
             axisLine={false}

@@ -10,7 +10,14 @@ import {
   YAxis,
 } from 'recharts';
 import { cn } from '../utils/cn';
-import { axisTick, chartAnimates, gridStroke, seriesColor, type ChartSeries } from './chartTheme';
+import {
+  axisTick,
+  chartAnimates,
+  gridStroke,
+  seriesColor,
+  valueAxis,
+  type ChartSeries,
+} from './chartTheme';
 import { ActivePoint, type ChartRow as Row } from './ActivePoint';
 import { ChartTooltip } from './ChartTooltip';
 
@@ -57,6 +64,8 @@ export function BarChart({
   'aria-label': ariaLabel,
 }: BarChartProps) {
   const activeRow = useRef<Row | null>(null);
+  // Round tick values instead of Recharts' evenly spaced ones (0, 65, 130...).
+  const axis = valueAxis(data, series.map((s) => s.key), stacked);
 
   function onKeyDown(e: KeyboardEvent<HTMLElement>) {
     const row = activeRow.current;
@@ -88,6 +97,7 @@ export function BarChart({
             minTickGap={16}
           />
           <YAxis
+            {...axis}
             tick={axisTick}
             tickLine={false}
             axisLine={false}
